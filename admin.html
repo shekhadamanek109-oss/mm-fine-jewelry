@@ -509,12 +509,14 @@
         </div>
         <div class="form-group"><label>Badge (optional)</label><input type="text" id="p-badge" class="form-input" placeholder="New, Exclusive..."></div>
       </div>
-      <div class="form-group"><label>Image URL / Path</label>
-        <div style="display:flex;gap:10px">
-          <input type="text" id="p-img" class="form-input" style="flex:1" required placeholder="assets/my_ring.jpg">
-          <button type="button" class="btn btn-secondary" onclick="document.getElementById('p-img-file').click()" style="padding:12px;font-size:10px"><i class="fa-solid fa-upload"></i></button>
-          <input type="file" id="p-img-file" style="display:none" accept="image/*" onchange="uploadProdPhoto(this)">
+      <div class="form-group"><label>Product Media (Upload multiple files)</label>
+        <div class="drop-zone" onclick="document.getElementById('p-media-files').click()" style="padding:20px; margin-bottom:12px;">
+          <i class="fa-solid fa-cloud-arrow-up" style="font-size:24px; margin-bottom:6px;"></i>
+          <span style="font-size:12px; font-weight:600;">Click to Upload Images &amp; Videos</span>
+          <p style="font-size:10px; color:var(--color-text-secondary); margin-top:2px;">Supports JPG, PNG, WEBP, MP4, WebM (Up to 10+ items)</p>
+          <input type="file" id="p-media-files" style="display:none" accept="image/*,video/*" multiple onchange="uploadProdMedia(this)">
         </div>
+        <div id="p-media-previews" style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:12px;"></div>
       </div>
       <div class="form-group"><label>Description</label><textarea id="p-desc" class="form-input" rows="3" required></textarea></div>
       <h4 style="font-size:14px;color:var(--color-gold-light);margin:18px 0 10px">Specifications</h4>
@@ -851,16 +853,19 @@ function renderProdTable() {
     </tr>`).join('') || `<tr><td colspan="6" style="text-align:center;color:var(--color-text-muted);padding:30px">No products yet. Add your first piece!</td></tr>`;
 }
 
+let currentProdMedia = [];
+
 function openProdModal(idx = -1) {
   document.getElementById('prod-modal').classList.add('open');
   document.getElementById('prod-modal-title').textContent = idx >= 0 ? 'Edit Collection Item' : 'Add New Collection Item';
   document.getElementById('prod-idx').value = idx;
+  currentProdMedia = [];
   if (idx >= 0) {
     const p = allProducts[idx];
     document.getElementById('prod-id').value = p.id;
     setVal('p-title', p.title); setVal('p-price', p.price);
     setVal('p-cat', p.category); setVal('p-badge', p.badge || '');
-    setVal('p-img', p.img); setVal('p-desc', p.desc);
+    setVal('p-desc', p.desc);
     setVal('p-stock', p.stock || 0);
     document.getElementById('p-enabled').checked = p.enabled !== false;
     setVal('s-metal', p.specs?.metal || ''); setVal('s-gem', p.specs?.gemstone || '');
@@ -868,17 +873,75 @@ function openProdModal(idx = -1) {
     const stdk = ['metal','gemstone','carats','clarity'];
     const ek = Object.keys(p.specs||{}).find(k => !stdk.includes(k));
     setVal('s-extra-k', ek || ''); setVal('s-extra-v', ek ? p.specs[ek] : '');
+    
+    // Load existing media
+    if (p.images && p.images.length > 0) {
+      p.images.forEach(url => currentProdMedia.push({ type: 'image', url }));
+    } else if (p.img) {
+      currentProdMedia.push({ type: 'image', url: p.img });
+    }
+    if (p.videos && p.videos.length > 0) {
+      p.videos.forEach(url => currentProdMedia.push({ type: 'video', url }));
+    }
   } else {
     document.getElementById('prod-idx').value = -1;
     document.getElementById('prod-id').value = 'item-' + Date.now();
-    ['p-title','p-price','p-badge','p-img','p-desc','s-metal','s-gem','s-carats','s-clarity','s-extra-k','s-extra-v'].forEach(id => setVal(id,''));
+    ['p-title','p-price','p-badge','p-desc','s-metal','s-gem','s-carats','s-clarity','s-extra-k','s-extra-v'].forEach(id => setVal(id,''));
     setVal('p-stock', 5);
     document.getElementById('p-enabled').checked = true;
     setVal('p-cat', 'rings');
   }
+  renderProdMediaPreviews();
 }
 
 function closeProdModal() { document.getElementById('prod-modal').classList.remove('open'); }
+
+function renderProdMediaPreviews() {
+  const container = document.getElementById('p-media-previews');
+  if (!container) return;
+  container.innerHTML = currentProdMedia.map((item, idx) => `
+    <div style="position:relative; width:80px; height:80px; border:1px solid var(--color-border); overflow:hidden; display:flex; align-items:center; justify-content:center; background:#000;">
+      ${item.type === 'video' ? `
+        <video src="${item.url}" style="width:100%; height:100%; object-fit:cover;"></video>
+        <div style="position:absolute; inset:0; background:rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; pointer-events:none;">
+          <i class="fa-solid fa-circle-play" style="font-size:20px; color:#fff;"></i>
+        </div>
+      ` : `
+        <img src="${item.url}" style="width:100%; height:100%; object-fit:cover;">
+      `}
+      <button type="button" onclick="removeProdMediaItem(${idx})" style="position:absolute; top:2px; right:2px; background:rgba(255,77,77,0.85); color:#fff; border:none; border-radius:50%; width:16px; height:16px; font-size:9px; cursor:pointer; display:flex; align-items:center; justify-content:center; line-height:1;">&times;</button>
+    </div>
+  `).join('');
+}
+
+function removeProdMediaItem(idx) {
+  currentProdMedia.splice(idx, 1);
+  renderProdMediaPreviews();
+}
+
+async function uploadProdMedia(input) {
+  const files = Array.from(input.files);
+  if (files.length === 0) return;
+  for (const file of files) {
+    const isVideo = file.type.startsWith('video/') || file.name.endsWith('.mp4') || file.name.endsWith('.webm') || file.name.endsWith('.mov');
+    const fd = new FormData();
+    fd.append('image', file);
+    try {
+      const r = await fetch('/api/upload-image', { method: 'POST', body: fd }).then(res => res.json());
+      if (r.success) {
+        currentProdMedia.push({ type: isVideo ? 'video' : 'image', url: r.url });
+        currentMediaUrls.unshift(r.url);
+      } else {
+        alert('Upload failed for ' + file.name + ': ' + r.error);
+      }
+    } catch (e) {
+      alert('Upload failed for ' + file.name + ': ' + e.message);
+    }
+  }
+  renderProdMediaPreviews();
+  renderMediaGrid();
+  input.value = '';
+}
 
 async function submitProduct(e) {
   e.preventDefault();
@@ -887,12 +950,19 @@ async function submitProduct(e) {
   const ek = getVal('s-extra-k').trim().toLowerCase();
   const ev = getVal('s-extra-v').trim();
   if (ek && ev) specs[ek] = ev;
+  
+  const images = currentProdMedia.filter(item => item.type === 'image').map(item => item.url);
+  const videos = currentProdMedia.filter(item => item.type === 'video').map(item => item.url);
+  const mainImg = images.length > 0 ? images[0] : (videos.length > 0 ? 'assets/jewelry_hero_bg.png' : '');
+  
   const item = { 
     id: getVal('prod-id'), 
     category: getVal('p-cat'), 
     title: getVal('p-title'), 
     price: getVal('p-price'), 
-    img: getVal('p-img'), 
+    img: mainImg, 
+    images,
+    videos,
     badge: getVal('p-badge'), 
     desc: getVal('p-desc'), 
     stock: parseInt(getVal('p-stock')) || 0,

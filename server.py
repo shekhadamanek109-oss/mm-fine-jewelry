@@ -403,6 +403,9 @@ class CustomServerHandler(SimpleHTTPRequestHandler):
         if path.endswith('.webp'): return 'image/webp'
         if path.endswith('.svg'): return 'image/svg+xml'
         if path.endswith('.gif'): return 'image/gif'
+        if path.endswith('.mp4'): return 'video/mp4'
+        if path.endswith('.webm'): return 'video/webm'
+        if path.endswith('.mov'): return 'video/quicktime'
         return 'image/jpeg'
 
     def serve_file(self, file_path, content_type):

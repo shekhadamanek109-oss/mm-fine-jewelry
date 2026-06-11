@@ -431,7 +431,82 @@ function openProductModal(id) {
   
   const modal = document.getElementById('product-modal');
   
-  document.getElementById('detail-modal-img').src = p.img;
+  const allMedia = [];
+  if (p.images && p.images.length > 0) {
+    p.images.forEach(url => allMedia.push({ type: 'image', url }));
+  } else if (p.img) {
+    allMedia.push({ type: 'image', url: p.img });
+  }
+  if (p.videos && p.videos.length > 0) {
+    p.videos.forEach(url => allMedia.push({ type: 'video', url }));
+  }
+
+  const zoomContainer = document.getElementById('modal-zoom-container');
+  if (zoomContainer) {
+    if (allMedia.length > 1) {
+      zoomContainer.innerHTML = `
+        <div id="gallery-main-view" style="width:100%; aspect-ratio:1/1.1; position:relative; overflow:hidden; background:#000; display:flex; align-items:center; justify-content:center;">
+          <img id="detail-modal-img" src="${allMedia[0].url}" style="width:100%; height:100%; object-fit:cover; display:block;">
+          <video id="detail-modal-video" src="" controls style="width:100%; height:100%; object-fit:contain; display:none;"></video>
+          <div id="zoom-lens" style="position:absolute; width:150px; height:150px; border:2px solid rgba(212,175,55,0.4); border-radius:50%; pointer-events:none; background-repeat:no-repeat; background-size:300% 300%; display:none; transform:translate(-50%, -50%);"></div>
+        </div>
+        <div id="gallery-thumbnails" style="display:flex; gap:10px; padding:15px; background:rgba(0,0,0,0.5); overflow-x:auto; border-top:1px solid var(--color-border); justify-content:center;">
+          ${allMedia.map((media, index) => `
+            <div class="gallery-thumb ${index === 0 ? 'active' : ''}" data-idx="${index}" style="width:50px; height:50px; border:1px solid ${index === 0 ? 'var(--color-gold)' : 'var(--color-border)'}; cursor:pointer; overflow:hidden; position:relative; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              ${media.type === 'video' ? `
+                <video src="${media.url}" style="width:100%; height:100%; object-fit:cover;"></video>
+                <div style="position:absolute; inset:0; background:rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center;">
+                  <i class="fa-solid fa-play" style="font-size:10px; color:#fff;"></i>
+                </div>
+              ` : `
+                <img src="${media.url}" style="width:100%; height:100%; object-fit:cover;">
+              `}
+            </div>
+          `).join('')}
+        </div>
+      `;
+      zoomContainer.style.height = 'auto';
+      zoomContainer.style.aspectRatio = 'auto';
+      
+      const thumbs = zoomContainer.querySelectorAll('.gallery-thumb');
+      const mainImg = zoomContainer.querySelector('#detail-modal-img');
+      const mainVid = zoomContainer.querySelector('#detail-modal-video');
+      
+      thumbs.forEach(thumb => {
+        thumb.addEventListener('click', () => {
+          thumbs.forEach(t => {
+            t.classList.remove('active');
+            t.style.borderColor = 'var(--color-border)';
+          });
+          thumb.classList.add('active');
+          thumb.style.borderColor = 'var(--color-gold)';
+          
+          const idx = parseInt(thumb.getAttribute('data-idx'));
+          const selectedMedia = allMedia[idx];
+          
+          if (selectedMedia.type === 'video') {
+            mainImg.style.display = 'none';
+            mainVid.src = selectedMedia.url;
+            mainVid.style.display = 'block';
+            mainVid.play().catch(() => {});
+          } else {
+            mainVid.pause();
+            mainVid.style.display = 'none';
+            mainImg.src = selectedMedia.url;
+            mainImg.style.display = 'block';
+          }
+        });
+      });
+    } else {
+      zoomContainer.style.height = '';
+      zoomContainer.style.aspectRatio = '1 / 1.1';
+      zoomContainer.innerHTML = `
+        <img class="modal-img" id="detail-modal-img" src="${p.img}" alt="" style="width:100%; height:100%; object-fit:cover; display:block;">
+        <div id="zoom-lens" style="position:absolute; width:150px; height:150px; border:2px solid rgba(212,175,55,0.4); border-radius:50%; pointer-events:none; background-repeat:no-repeat; background-size:300% 300%; display:none; transform:translate(-50%, -50%);"></div>
+      `;
+    }
+    initProductZoom();
+  }
   document.getElementById('detail-modal-category').textContent = p.category.slice(0, -1).toUpperCase();
   document.getElementById('detail-modal-title').textContent = p.title;
   document.getElementById('detail-modal-price').textContent = p.price;
@@ -532,30 +607,46 @@ function openProductModal(id) {
 }
 
 function initProductZoom() {
-  const container = document.getElementById('modal-zoom-container');
+  const container = document.getElementById('gallery-main-view') || document.getElementById('modal-zoom-container');
   const img = document.getElementById('detail-modal-img');
   const lens = document.getElementById('zoom-lens');
   
   if (!container || !img || !lens) return;
   
-  container.addEventListener('mousemove', (e) => {
-    lens.style.display = 'block';
-    const rect = container.getBoundingClientRect();
+  // Clean up existing listeners to avoid duplicates by cloning the container
+  const newContainer = container.cloneNode(true);
+  container.parentNode.replaceChild(newContainer, container);
+  
+  // Re-fetch elements from the newly cloned container
+  const activeContainer = document.getElementById('gallery-main-view') || document.getElementById('modal-zoom-container');
+  const activeImg = document.getElementById('detail-modal-img');
+  const activeLens = document.getElementById('zoom-lens');
+  
+  if (!activeContainer || !activeImg || !activeLens) return;
+
+  activeContainer.addEventListener('mousemove', (e) => {
+    // Only show lens if the image is visible (not video!)
+    if (activeImg.style.display === 'none') {
+      activeLens.style.display = 'none';
+      return;
+    }
+    activeLens.style.display = 'block';
+    const rect = activeContainer.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     
-    lens.style.left = `${x}px`;
-    lens.style.top = `${y}px`;
+    activeLens.style.left = `${x}px`;
+    activeLens.style.top = `${y}px`;
     
     const xPercent = (x / rect.width) * 100;
     const yPercent = (y / rect.height) * 100;
     
-    lens.style.backgroundImage = `url(${img.src})`;
-    lens.style.backgroundPosition = `${xPercent}% ${yPercent}%`;
+    activeLens.style.backgroundImage = `url(${activeImg.src})`;
+    activeLens.style.backgroundPosition = `${xPercent}% ${yPercent}%`;
   });
   
-  container.addEventListener('mouseleave', () => {
-    lens.style.display = 'none';
+  activeContainer.addEventListener('mouseleave', () => {
+    activeLens.style.display = 'none';
   });
 }
 
