@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: mm-fine-jewelry
+    env: python
+    buildCommand: "mkdir -p /data/assets"
+    startCommand: "python3 server.py $PORT"
+    disk:
+      name: jewelry-data
+      mountPath: /data
+      sizeGB: 1

@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atelier Console | MM Fine Jewelry</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { background: #030303; }
+
+    /* AUTH GATE */
+    .admin-gate {
+      position: fixed; inset: 0;
+      background: #050505;
+      z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.5s ease;
+    }
+    .admin-gate.hidden { opacity: 0; pointer-events: none; }
+    .gate-card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      padding: 50px; text-align: center;
+      max-width: 440px; width: 90%;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+    }
+    .gate-brand { font-family: var(--font-serif); font-size: 26px; letter-spacing: 0.15em; margin-bottom: 5px; }
+    .gate-sub { font-size: 9px; letter-spacing: 0.4em; color: var(--color-gold); text-transform: uppercase; margin-bottom: 35px; }
+    .auth-error { color: #ff4d4d; font-size: 12px; margin-top: 8px; display: none; }
+
+    /* LAYOUT */
+    .admin-wrap { max-width: 1300px; margin: 100px auto 80px; padding: 0 24px; }
+    .admin-topbar {
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--color-border); padding-bottom: 20px; margin-bottom: 30px;
+    }
+    .admin-topbar h1 { font-size: 26px; }
+    .admin-topbar p { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+
+    /* TABS */
+    .tabs-nav {
+      display: flex; gap: 4px; flex-wrap: wrap;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--color-border);
+      padding: 6px; margin-bottom: 30px;
+    }
+    .tab-btn {
+      background: transparent; border: none;
+      color: var(--color-text-secondary);
+      font-family: var(--font-sans); font-size: 11px;
+      font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+      cursor: pointer; padding: 10px 18px;
+      transition: var(--transition-quick); border-radius: 0;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .tab-btn i { font-size: 12px; }
+    .tab-btn.active { background: var(--color-gold-gradient); color: #000; }
+    .tab-btn:not(.active):hover { color: var(--color-text-primary); background: rgba(255,255,255,0.04); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeIn 0.3s ease; }
+
+    /* CARDS */
+    .acard {
+      background: var(--color-bg-card); border: 1px solid var(--color-border);
+      padding: 35px; margin-bottom: 24px; position: relative;
+    }
+    .acard::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 3px; height: 100%; background: var(--color-gold-gradient);
+    }
+    .acard-title {
+      font-size: 16px; font-weight: 400; color: var(--color-gold-light);
+      margin-bottom: 22px; display: flex; align-items: center; gap: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px;
+    }
+
+    /* BADGE */
+    .badge {
+      display: inline-block; padding: 3px 8px; font-size: 9px;
+      font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .badge-unread { background: rgba(255,77,77,0.15); color: #ff6b6b; border: 1px solid rgba(255,77,77,0.3); }
+    .badge-read { background: rgba(160,160,160,0.1); color: #999; border: 1px solid rgba(160,160,160,0.2); }
+    .badge-replied { background: rgba(0,204,122,0.12); color: #00cc7a; border: 1px solid rgba(0,204,122,0.25); }
+
+    /* TABLE */
+    .atable { width: 100%; border-collapse: collapse; }
+    .atable th, .atable td { padding: 13px 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .atable th { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-gold); font-weight: 500; }
+    .atable td { font-size: 13px; color: var(--color-text-secondary); vertical-align: middle; }
+    .atable tr:hover td { background: rgba(255,255,255,0.015); }
+    .prod-thumb { width: 46px; height: 46px; object-fit: cover; border: 1px solid var(--color-border); }
+
+    /* MESSAGE CARDS */
+    .msg-card {
+      border: 1px solid var(--color-border); padding: 22px 24px;
+      margin-bottom: 14px; cursor: pointer;
+      transition: var(--transition-quick); background: rgba(0,0,0,0.2);
+    }
+    .msg-card:hover { border-color: var(--color-border-hover); }
+    .msg-card.unread { border-left: 3px solid #ff6b6b; }
+    .msg-card.replied { border-left: 3px solid #00cc7a; }
+    .msg-card.read { border-left: 3px solid #555; }
+    .msg-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+    .msg-name { font-size: 15px; font-weight: 500; color: var(--color-text-primary); }
+    .msg-time { font-size: 11px; color: var(--color-text-muted); }
+    .msg-meta { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 6px; }
+    .msg-note { font-size: 13px; color: var(--color-text-secondary); font-style: italic; line-height: 1.5; }
+    .msg-replies { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.06); }
+    .reply-bubble {
+      background: rgba(212,175,55,0.06); border: 1px solid rgba(212,175,55,0.12);
+      padding: 10px 14px; margin-bottom: 8px; font-size: 12px; line-height: 1.5;
+    }
+    .reply-bubble .reply-meta { font-size: 10px; color: var(--color-gold); margin-bottom: 5px; letter-spacing: 0.08em; }
+
+    /* UPLOAD ZONE */
+    .drop-zone {
+      border: 2px dashed var(--color-border); padding: 36px;
+      text-align: center; cursor: pointer; transition: var(--transition-quick);
+    }
+    .drop-zone:hover { border-color: var(--color-gold); background: rgba(212,175,55,0.02); }
+    .drop-zone i { font-size: 30px; color: var(--color-gold); display: block; margin-bottom: 12px; }
+
+    /* MEDIA GRID */
+    .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 12px; margin-top: 18px; }
+    .media-thumb {
+      position: relative; aspect-ratio: 1; overflow: hidden;
+      border: 1px solid var(--color-border); cursor: pointer;
+    }
+    .media-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .media-thumb-overlay {
+      position: absolute; inset: 0; background: rgba(0,0,0,0.75);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      opacity: 0; transition: 0.2s; font-size: 10px; text-align: center; padding: 6px;
+    }
+    .media-thumb:hover .media-thumb-overlay { opacity: 1; }
+
+    /* AUDIT LOG */
+    .audit-entry {
+      display: flex; gap: 16px; padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04); align-items: flex-start;
+    }
+    .audit-icon {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.2);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; color: var(--color-gold); font-size: 13px;
+    }
+    .audit-body { flex: 1; }
+    .audit-action { font-size: 13px; color: var(--color-text-primary); font-weight: 500; margin-bottom: 3px; }
+    .audit-details { font-size: 12px; color: var(--color-text-secondary); }
+    .audit-time { font-size: 10px; color: var(--color-text-muted); margin-top: 3px; }
+
+    /* PRICING TABLE */
+    .pricing-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .pricing-input-group { display: flex; flex-direction: column; gap: 5px; }
+    .pricing-input-group label { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-secondary); }
+
+    /* SHOWROOM TAGS */
+    .showroom-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+    .showroom-item { display: flex; gap: 10px; align-items: center; }
+    .showroom-item input { flex: 1; }
+    .btn-remove { background: transparent; border: 1px solid rgba(255,77,77,0.4); color: #ff6b6b; padding: 8px 12px; cursor: pointer; font-size: 11px; transition: 0.2s; }
+    .btn-remove:hover { background: rgba(255,77,77,0.1); }
+
+    /* MODAL */
+    .modal-bg {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px); z-index: 3000;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: 0.35s ease;
+    }
+    .modal-bg.open { opacity: 1; pointer-events: all; }
+    .modal-box {
+      background: var(--color-bg-card); border: 1px solid var(--color-border);
+      width: 90%; max-width: 720px; max-height: 88vh; overflow-y: auto;
+      padding: 40px; position: relative;
+      transform: scale(0.96); transition: 0.35s ease;
+    }
+    .modal-bg.open .modal-box { transform: scale(1); }
+    .modal-close { position: absolute; top: 16px; right: 18px; background: none; border: none; font-size: 22px; color: var(--color-text-secondary); cursor: pointer; }
+    .modal-close:hover { color: var(--color-text-primary); }
+    .modal-title { font-size: 22px; margin-bottom: 20px; border-bottom: 1px solid var(--color-border); padding-bottom: 12px; }
+
+    /* STATS BAR */
+    .stats-bar { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 28px; }
+    .stat-box { background: var(--color-bg-card); border: 1px solid var(--color-border); padding: 20px 22px; }
+    .stat-box .stat-value { font-family: var(--font-serif); font-size: 32px; color: var(--color-gold-light); }
+    .stat-box .stat-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-text-secondary); margin-top: 4px; }
+    @media (max-width: 768px) {
+      .stats-bar { grid-template-columns: 1fr 1fr; }
+      .tabs-nav { overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- AUTH GATE -->
+<div id="auth-gate" class="admin-gate">
+  <div class="gate-card">
+    <div class="gate-brand">MM FINE JEWELRY</div>
+    <div class="gate-sub">Atelier Console</div>
+    <form onsubmit="doAuth(event)">
+      <div class="form-group" style="margin-bottom:24px">
+        <label for="passcode">Access Passcode</label>
+        <input type="password" id="passcode" class="form-input"
+          style="text-align:center;letter-spacing:.5em;font-size:20px" placeholder="••••" required autofocus>
+        <div class="auth-error" id="auth-err">Incorrect passcode.</div>
+      </div>
+      <button class="btn btn-primary" type="submit" style="width:100%">Enter Console</button>
+    </form>
+  </div>
+</div>
+
+<!-- MAIN ADMIN LAYOUT -->
+<div class="admin-wrap">
+  <div class="admin-topbar">
+    <div>
+      <h1>Atelier Console</h1>
+      <p>MM Fine Jewelry · Full Administration Dashboard</p>
+    </div>
+    <div style="display:flex;gap:12px;align-items:center">
+      <span id="server-status-dot" style="width:8px;height:8px;border-radius:50%;background:#888;display:inline-block;"></span>
+      <span id="server-status-text" style="font-size:11px;color:var(--color-text-muted)">Checking server...</span>
+      <a href="index.html" class="btn btn-secondary" style="font-size:10px;padding:10px 18px">
+        <i class="fa-solid fa-eye" style="margin-right:6px"></i> View Site
+      </a>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-bar" id="stats-bar">
+    <div class="stat-box"><div class="stat-value" id="stat-revenue">$0</div><div class="stat-label">Total Revenue</div></div>
+    <div class="stat-box"><div class="stat-value" id="stat-orders">0</div><div class="stat-label">Total Orders</div></div>
+    <div class="stat-box"><div class="stat-value" id="stat-products">0</div><div class="stat-label">Catalog Products</div></div>
+    <div class="stat-box"><div class="stat-value" id="stat-unread">0</div><div class="stat-label">Unread Messages</div></div>
+  </div>
+
+  <!-- TAB NAV -->
+  <div class="tabs-nav">
+    <button class="tab-btn active" data-tab="copy"><i class="fa-solid fa-pen-nib"></i> Website Copy</button>
+    <button class="tab-btn" data-tab="catalog"><i class="fa-solid fa-gem"></i> Product Catalog</button>
+    <button class="tab-btn" data-tab="orders"><i class="fa-solid fa-cart-shopping"></i> Checkout Orders</button>
+    <button class="tab-btn" data-tab="coupons"><i class="fa-solid fa-ticket"></i> Coupons</button>
+    <button class="tab-btn" data-tab="customers"><i class="fa-solid fa-users"></i> Clients</button>
+    <button class="tab-btn" data-tab="messages"><i class="fa-solid fa-inbox"></i> Customer Messages <span id="unread-badge" style="background:#ff4d4d;color:#fff;font-size:9px;padding:2px 6px;border-radius:20px;display:none;"></span></button>
+    <button class="tab-btn" data-tab="settings"><i class="fa-solid fa-sliders"></i> Site Settings</button>
+    <button class="tab-btn" data-tab="audit"><i class="fa-solid fa-scroll"></i> Audit Log</button>
+  </div>
+
+  <!-- ===== TAB 1: WEBSITE COPY ===== -->
+  <div id="tab-copy" class="tab-panel active">
+    <form onsubmit="saveConfig(event)">
+      <div class="acard">
+        <div class="acard-title"><i class="fa-solid fa-house"></i> Hero Section</div>
+        <div class="form-group"><label for="hero-subtitle">Sub-headline</label><input type="text" id="hero-subtitle" class="form-input"></div>
+        <div class="form-group"><label for="hero-title">Headline HTML</label><input type="text" id="hero-title" class="form-input"></div>
+        <div class="form-group"><label for="hero-desc">Hero Description</label><textarea id="hero-desc" class="form-input" rows="3"></textarea></div>
+      </div>
+      <div class="acard">
+        <div class="acard-title"><i class="fa-solid fa-diamond"></i> The Atelier Story</div>
+        <div class="form-group"><label for="at-subtitle">Category Tag</label><input type="text" id="at-subtitle" class="form-input"></div>
+        <div class="form-group"><label for="at-title">Section Headline</label><input type="text" id="at-title" class="form-input"></div>
+        <div class="form-group"><label for="at-text1">Paragraph 1</label><textarea id="at-text1" class="form-input" rows="4"></textarea></div>
+        <div class="form-group"><label for="at-text2">Paragraph 2</label><textarea id="at-text2" class="form-input" rows="4"></textarea></div>
+        <div class="grid-2col">
+          <div class="form-group"><label for="feat1-title">Feature 1 Title</label><input type="text" id="feat1-title" class="form-input"></div>
+          <div class="form-group"><label for="feat1-desc">Feature 1 Description</label><input type="text" id="feat1-desc" class="form-input"></div>
+        </div>
+        <div class="grid-2col">
+          <div class="form-group"><label for="feat2-title">Feature 2 Title</label><input type="text" id="feat2-title" class="form-input"></div>
+          <div class="form-group"><label for="feat2-desc">Feature 2 Description</label><input type="text" id="feat2-desc" class="form-input"></div>
+        </div>
+      </div>
+      <div style="text-align:right">
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk" style="margin-right:8px"></i>Save Copy</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- ===== TAB 2: PRODUCT CATALOG ===== -->
+  <div id="tab-catalog" class="tab-panel">
+    <div class="acard">
+      <div class="acard-title" style="justify-content:space-between">
+        <span><i class="fa-solid fa-layer-group"></i> Collection Items</span>
+        <button class="btn btn-secondary" onclick="openProdModal()" style="font-size:10px;padding:8px 16px">
+          <i class="fa-solid fa-plus" style="margin-right:6px"></i>Add New Piece
+        </button>
+      </div>
+      <table class="atable">
+        <thead>
+          <tr>
+            <th>Image</th><th>Title</th><th>Category</th><th>Price</th><th>Badge</th><th style="text-align:right">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="prod-table-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== TAB: CHECKOUT ORDERS ===== -->
+  <div id="tab-orders" class="tab-panel">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+      <div>
+        <h2 style="font-size:20px;margin-bottom:4px">Checkout Orders</h2>
+        <p style="font-size:12px;color:var(--color-text-secondary)">Manage custom jewelry checkout, invoices, and shipping progress.</p>
+      </div>
+      <button class="btn btn-secondary" onclick="loadOrders()" style="font-size:10px;padding:9px 15px">
+        <i class="fa-solid fa-rotate" style="margin-right:6px"></i>Refresh
+      </button>
+    </div>
+    <div class="acard">
+      <table class="atable">
+        <thead>
+          <tr>
+            <th>Order ID</th><th>Customer Name</th><th>Delivery Address</th><th>Total Invoiced</th><th>Status</th><th style="text-align:right">Action</th>
+          </tr>
+        </thead>
+        <tbody id="orders-table-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== TAB: COUPONS ===== -->
+  <div id="tab-coupons" class="tab-panel">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+      <div>
+        <h2 style="font-size:20px;margin-bottom:4px">Atelier Promo Coupons</h2>
+        <p style="font-size:12px;color:var(--color-text-secondary)">Manage active discount and reward codes applied during shipping checkout.</p>
+      </div>
+      <button class="btn btn-secondary" onclick="openCouponModal()" style="font-size:10px;padding:9px 15px">
+        <i class="fa-solid fa-plus" style="margin-right:6px"></i>Add Coupon
+      </button>
+    </div>
+    <div class="acard">
+      <table class="atable">
+        <thead>
+          <tr>
+            <th>Coupon Code</th><th>Discount Rate</th><th>Details</th><th style="text-align:right">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="coupons-table-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== TAB: CLIENTS ===== -->
+  <div id="tab-customers" class="tab-panel">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+      <div>
+        <h2 style="font-size:20px;margin-bottom:4px">Registered Customers</h2>
+        <p style="font-size:12px;color:var(--color-text-secondary)">A curated directory of registered clients at MM Atelier.</p>
+      </div>
+      <button class="btn btn-secondary" onclick="loadCustomers()" style="font-size:10px;padding:9px 15px">
+        <i class="fa-solid fa-rotate" style="margin-right:6px"></i>Refresh
+      </button>
+    </div>
+    <div class="acard">
+      <table class="atable">
+        <thead>
+          <tr>
+            <th>Full Name</th><th>Email Address</th><th>Role Status</th>
+          </tr>
+        </thead>
+        <tbody id="customers-table-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== TAB 3: CUSTOMER MESSAGES ===== -->
+  <div id="tab-messages" class="tab-panel">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+      <div>
+        <h2 style="font-size:20px;margin-bottom:4px">Customer Inquiries</h2>
+        <p style="font-size:12px;color:var(--color-text-secondary)">All booking requests and contact form submissions.</p>
+      </div>
+      <button class="btn btn-secondary" onclick="loadMessages()" style="font-size:10px;padding:9px 15px">
+        <i class="fa-solid fa-rotate" style="margin-right:6px"></i>Refresh
+      </button>
+    </div>
+    <div id="messages-container">
+      <p style="color:var(--color-text-muted);font-size:13px">Loading messages...</p>
+    </div>
+  </div>
+
+  <!-- ===== TAB 4: SITE SETTINGS ===== -->
+  <div id="tab-settings" class="tab-panel">
+    <form onsubmit="saveAllSettings(event)">
+
+      <!-- Brand -->
+      <div class="acard">
+        <div class="acard-title"><i class="fa-solid fa-tag"></i> Brand Identity</div>
+        <div class="grid-2col">
+          <div class="form-group"><label for="brand-title">Logo Title</label><input type="text" id="brand-title" class="form-input" placeholder="MM JEWELRY"></div>
+          <div class="form-group"><label for="brand-sub">Logo Subtitle</label><input type="text" id="brand-sub" class="form-input" placeholder="International"></div>
+        </div>
+        <div class="form-group"><label for="brand-about">Footer About Text</label><textarea id="brand-about" class="form-input" rows="2"></textarea></div>
+      </div>
+
+      <!-- Customizer Pricing -->
+      <div class="acard">
+        <div class="acard-title"><i class="fa-solid fa-dollar-sign"></i> Customizer Base Pricing (USD)</div>
+        <p style="font-size:12px;color:var(--color-text-secondary);margin-bottom:18px">These values determine the live price estimate displayed in the ring customizer.</p>
+        <h4 style="font-size:13px;color:var(--color-gold-light);margin-bottom:10px">Metals</h4>
+        <div class="pricing-row">
+          <div class="pricing-input-group"><label>Platinum 950</label><input type="number" id="price-platinum" class="form-input"></div>
+          <div class="pricing-input-group"><label>18K Yellow Gold</label><input type="number" id="price-yellow-gold" class="form-input"></div>
+          <div class="pricing-input-group"><label>18K White Gold</label><input type="number" id="price-white-gold" class="form-input"></div>
+          <div class="pricing-input-group"><label>18K Rose Gold</label><input type="number" id="price-rose-gold" class="form-input"></div>
+        </div>
+        <h4 style="font-size:13px;color:var(--color-gold-light);margin:14px 0 10px">Gemstones</h4>
+        <div class="pricing-row">
+          <div class="pricing-input-group"><label>Diamond</label><input type="number" id="price-diamond" class="form-input"></div>
+          <div class="pricing-input-group"><label>Emerald</label><input type="number" id="price-emerald" class="form-input"></div>
+          <div class="pricing-input-group"><label>Sapphire</label><input type="number" id="price-sapphire" class="form-input"></div>
+          <div class="pricing-input-group"><label>Ruby</label><input type="number" id="price-ruby" class="form-input"></div>
+        </div>
+        <h4 style="font-size:13px;color:var(--color-gold-light);margin:14px 0 10px">Setting Styles</h4>
+        <div class="pricing-row">
+          <div class="pricing-input-group"><label>Classic Solitaire</label><input type="number" id="price-solitaire" class="form-input"></div>
+          <div class="pricing-input-group"><label>Halo Vintage</label><input type="number" id="price-halo" class="form-input"></div>
+          <div class="pricing-input-group"><label>Three-Stone Royal</label><input type="number" id="price-threestone" class="form-input"></div>
+        </div>
+      </div>
+
+      <!-- Showrooms -->
+      <div class="acard">
+        <div class="acard-title"><i class="fa-solid fa-location-dot"></i> Showroom Locations</div>
+        <div class="showroom-list" id="showrooms-list"></div>
+        <button type="button" class="btn btn-secondary" onclick="addShowroom()" style="font-size:10px;padding:9px 16px">
+          <i class="fa-solid fa-plus" style="margin-right:6px"></i>Add Location
+        </button>
+      </div>
+
+      <!-- Booking Services -->
+      <div class="acard">
+        <div class="acard-title"><i class="fa-solid fa-calendar-check"></i> Consultation Services</div>
+        <div id="services-list"></div>
+        <button type="button" class="btn btn-secondary" onclick="addService()" style="font-size:10px;padding:9px 16px">
+          <i class="fa-solid fa-plus" style="margin-right:6px"></i>Add Service
+        </button>
+      </div>
+
+      <!-- Media Library -->
+      <div class="acard">
+        <div class="acard-title"><i class="fa-solid fa-cloud-arrow-up"></i> Media Uploads</div>
+        <div class="drop-zone" onclick="document.getElementById('media-file-inp').click()">
+          <i class="fa-solid fa-images"></i>
+          <strong>Drag &amp; Drop or Click to Upload</strong>
+          <p style="font-size:11px;color:var(--color-text-secondary);margin-top:4px">JPEG, PNG, WEBP supported</p>
+          <input type="file" id="media-file-inp" style="display:none" accept="image/*" onchange="uploadMedia(this)">
+        </div>
+        <div id="media-grid" class="media-grid"></div>
+      </div>
+
+      <div style="text-align:right">
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk" style="margin-right:8px"></i>Save All Settings</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- ===== TAB 5: AUDIT LOG ===== -->
+  <div id="tab-audit" class="tab-panel">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+      <div>
+        <h2 style="font-size:20px;margin-bottom:4px">Audit Trail</h2>
+        <p style="font-size:12px;color:var(--color-text-secondary)">Chronological log of all admin actions for security &amp; accountability.</p>
+      </div>
+      <button class="btn btn-secondary" onclick="loadAuditLog()" style="font-size:10px;padding:9px 15px">
+        <i class="fa-solid fa-rotate" style="margin-right:6px"></i>Refresh
+      </button>
+    </div>
+    <div class="acard">
+      <div id="audit-log-container">
+        <p style="color:var(--color-text-muted);font-size:13px">Loading audit log...</p>
+      </div>
+    </div>
+  </div>
+</div><!-- /admin-wrap -->
+
+<!-- PRODUCT EDIT MODAL -->
+<div id="prod-modal" class="modal-bg">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeProdModal()">&times;</button>
+    <h2 class="modal-title" id="prod-modal-title">Add Jewelry Piece</h2>
+    <form onsubmit="submitProduct(event)">
+      <input type="hidden" id="prod-idx">
+      <input type="hidden" id="prod-id">
+      <div class="grid-2col">
+        <div class="form-group"><label>Name</label><input type="text" id="p-title" class="form-input" required></div>
+        <div class="form-group"><label>Price</label><input type="text" id="p-price" class="form-input" required placeholder="$9,400"></div>
+      </div>
+      <div class="grid-2col">
+        <div class="form-group"><label>Inventory Stock</label><input type="number" id="p-stock" class="form-input" required placeholder="5" min="0"></div>
+        <div class="form-group" style="align-self:center;flex-direction:row;gap:8px;margin-top:12px">
+          <input type="checkbox" id="p-enabled" style="width:20px;height:20px;accent-color:var(--color-gold)" checked>
+          <label for="p-enabled" style="margin:0">Enable Visibility</label>
+        </div>
+      </div>
+      <div class="grid-2col">
+        <div class="form-group"><label>Category</label>
+          <select id="p-cat" class="form-input">
+            <option value="rings">Rings</option>
+            <option value="necklaces">Necklaces</option>
+            <option value="earrings">Earrings</option>
+            <option value="bracelets">Bracelets</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Badge (optional)</label><input type="text" id="p-badge" class="form-input" placeholder="New, Exclusive..."></div>
+      </div>
+      <div class="form-group"><label>Image URL / Path</label>
+        <div style="display:flex;gap:10px">
+          <input type="text" id="p-img" class="form-input" style="flex:1" required placeholder="assets/my_ring.jpg">
+          <button type="button" class="btn btn-secondary" onclick="document.getElementById('p-img-file').click()" style="padding:12px;font-size:10px"><i class="fa-solid fa-upload"></i></button>
+          <input type="file" id="p-img-file" style="display:none" accept="image/*" onchange="uploadProdPhoto(this)">
+        </div>
+      </div>
+      <div class="form-group"><label>Description</label><textarea id="p-desc" class="form-input" rows="3" required></textarea></div>
+      <h4 style="font-size:14px;color:var(--color-gold-light);margin:18px 0 10px">Specifications</h4>
+      <div class="grid-2col">
+        <div class="form-group"><label>Metal</label><input type="text" id="s-metal" class="form-input" placeholder="Platinum 950"></div>
+        <div class="form-group"><label>Gemstone</label><input type="text" id="s-gem" class="form-input" placeholder="Round Cut Diamond"></div>
+        <div class="form-group"><label>Carats / Weight</label><input type="text" id="s-carats" class="form-input"></div>
+        <div class="form-group"><label>Clarity / Standard</label><input type="text" id="s-clarity" class="form-input"></div>
+        <div class="form-group"><label>Extra Spec Label</label><input type="text" id="s-extra-k" class="form-input" placeholder="color, length, weight..."></div>
+        <div class="form-group"><label>Extra Spec Value</label><input type="text" id="s-extra-v" class="form-input"></div>
+      </div>
+      <div class="booking-actions" style="margin-top:24px">
+        <button type="button" class="btn btn-secondary" onclick="closeProdModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check" style="margin-right:7px"></i>Save Piece</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MESSAGE REPLY MODAL -->
+<div id="reply-modal" class="modal-bg">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeReplyModal()">&times;</button>
+    <h2 class="modal-title">Customer Inquiry</h2>
+    <div id="reply-msg-detail"></div>
+    <div class="form-group" style="margin-top:20px">
+      <label for="reply-text">Your Reply</label>
+      <textarea id="reply-text" class="form-input" rows="4" placeholder="Type your reply to the customer..."></textarea>
+    </div>
+    <div class="booking-actions" style="margin-top:16px">
+      <button class="btn btn-secondary" onclick="closeReplyModal()">Close</button>
+      <button class="btn btn-primary" onclick="sendReply()"><i class="fa-solid fa-paper-plane" style="margin-right:7px"></i>Send Reply</button>
+    </div>
+  </div>
+</div>
+
+<!-- COUPON ADD MODAL -->
+<div id="coupon-modal" class="modal-bg">
+  <div class="modal-box" style="max-width: 440px;">
+    <button class="modal-close" onclick="closeCouponModal()">&times;</button>
+    <h2 class="modal-title">Create Promo Coupon</h2>
+    <form onsubmit="submitCoupon(event)">
+      <div class="form-group">
+        <label>Coupon Code</label>
+        <input type="text" id="c-code" class="form-input" placeholder="e.g. SPECIAL20" required style="text-transform: uppercase;">
+      </div>
+      <div class="form-group">
+        <label>Discount Rate (e.g. 0.10 for 10% Off)</label>
+        <input type="number" step="0.01" min="0" max="1" id="c-rate" class="form-input" placeholder="0.10" required>
+      </div>
+      <div class="form-group">
+        <label>Coupon Description</label>
+        <input type="text" id="c-desc" class="form-input" placeholder="e.g. 10% Off Winter Bridal Wear" required>
+      </div>
+      <div class="booking-actions" style="margin-top:24px">
+        <button type="button" class="btn btn-secondary" onclick="closeCouponModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Code</button>
+<script>
+// ===== GLOBAL STATE =====
+let allProducts = [];
+let allConfig = {};
+let allMessages = [];
+let allAudit = [];
+let allOrders = [];
+let allCustomers = [];
+let currentMsgId = null;
+let currentMediaUrls = ['assets/jewelry_hero_bg.png'];
+
+const ADMIN_PASS = 'admin123';
+
+// ===== AUTH =====
+function doAuth(e) {
+  e.preventDefault();
+  if (document.getElementById('passcode').value === ADMIN_PASS) {
+    sessionStorage.setItem('mm_auth','1');
+    document.getElementById('auth-gate').classList.add('hidden');
+    init();
+  } else {
+    const err = document.getElementById('auth-err');
+    err.style.display = 'block';
+    document.getElementById('passcode').value = '';
+  }
+}
+
+function initAdminApp() {
+  if (sessionStorage.getItem('mm_auth') === '1') {
+    document.getElementById('auth-gate').classList.add('hidden');
+    init();
+  }
+  initTabs();
+}
+
+if (document.readyState === 'loading') {
+  window.addEventListener('DOMContentLoaded', initAdminApp);
+} else {
+  initAdminApp();
+}
+
+// ===== INIT =====
+async function init() {
+  checkServer();
+  await Promise.all([loadConfig(), loadProducts(), loadMessages(), loadAuditLog(), loadMedia(), loadOrders(), loadCustomers()]);
+  updateStats();
+}
+
+function checkServer() {
+  fetch('/api/get-messages').then(() => {
+    document.getElementById('server-status-dot').style.background = '#00cc7a';
+    document.getElementById('server-status-text').textContent = 'Server Online';
+  }).catch(() => {
+    document.getElementById('server-status-dot').style.background = '#ff4d4d';
+    document.getElementById('server-status-text').textContent = 'Server Offline';
+  });
+}
+
+// ===== TABS =====
+function initTabs() {
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+      logAction('tab_visit', `Opened tab: ${btn.dataset.tab}`);
+    });
+  });
+}
+
+// ===== STATS =====
+function updateStats() {
+  const rev = allOrders.filter(o => o.status !== 'Cancelled').reduce((sum, o) => {
+    const val = parseFloat(o.total.replace(/[$,]/g, ''));
+    return sum + val;
+  }, 0);
+  
+  document.getElementById('stat-revenue').textContent = `$${rev.toLocaleString()}`;
+  document.getElementById('stat-orders').textContent = allOrders.length;
+  document.getElementById('stat-products').textContent = allProducts.length;
+  
+  const unread = allMessages.filter(m => m.status === 'unread').length;
+  document.getElementById('stat-unread').textContent = unread;
+  
+  const badge = document.getElementById('unread-badge');
+  if (unread > 0) { badge.textContent = unread; badge.style.display = 'inline'; }
+  else { badge.style.display = 'none'; }
+}
+
+// ===== CONFIG / COPY =====
+async function loadConfig() {
+  try {
+    const r = await fetch('data/config.json');
+    allConfig = await r.json();
+    populateCopyForm();
+    populateSettingsForm();
+    renderCouponsTable();
+  } catch(e) { console.warn('Config load failed'); }
+}
+
+function populateCopyForm() {
+  const h = allConfig.hero || {};
+  const a = allConfig.atelier || {};
+  setVal('hero-subtitle', h.subtitle || '');
+  setVal('hero-title', h.title || '');
+  setVal('hero-desc', h.desc || '');
+  setVal('at-subtitle', a.subtitle || '');
+  setVal('at-title', a.title || '');
+  setVal('at-text1', a.text1 || '');
+  setVal('at-text2', a.text2 || '');
+  setVal('feat1-title', a.feat1_title || '');
+  setVal('feat1-desc', a.feat1_desc || '');
+  setVal('feat2-title', a.feat2_title || '');
+  setVal('feat2-desc', a.feat2_desc || '');
+}
+
+function populateSettingsForm() {
+  const b = allConfig.brand || {};
+  const cp = allConfig.customizer_pricing || {};
+  setVal('brand-title', b.logo_title || '');
+  setVal('brand-sub', b.logo_subtitle || '');
+  setVal('brand-about', b.about_desc || '');
+
+  // Pricing
+  setVal('price-platinum', (cp.metal || {}).platinum || 2200);
+  setVal('price-yellow-gold', (cp.metal || {})['yellow-gold'] || 1500);
+  setVal('price-white-gold', (cp.metal || {})['white-gold'] || 1600);
+  setVal('price-rose-gold', (cp.metal || {})['rose-gold'] || 1550);
+  setVal('price-diamond', (cp.gem || {}).diamond || 5500);
+  setVal('price-emerald', (cp.gem || {}).emerald || 4200);
+  setVal('price-sapphire', (cp.gem || {}).sapphire || 3800);
+  setVal('price-ruby', (cp.gem || {}).ruby || 4800);
+  setVal('price-solitaire', (cp.design || {}).solitaire || 1200);
+  setVal('price-halo', (cp.design || {}).halo || 1800);
+  setVal('price-threestone', (cp.design || {}).threestone || 2500);
+
+  // Showrooms
+  renderShowrooms(allConfig.showrooms || []);
+  // Services
+  renderServices(allConfig.booking_services || []);
+}
+
+async function saveConfig(e) {
+  e.preventDefault();
+  const updated = {
+    ...allConfig,
+    hero: {
+      subtitle: getVal('hero-subtitle'),
+      title: getVal('hero-title'),
+      desc: getVal('hero-desc')
+    },
+    atelier: {
+      subtitle: getVal('at-subtitle'),
+      title: getVal('at-title'),
+      text1: getVal('at-text1'),
+      text2: getVal('at-text2'),
+      feat1_title: getVal('feat1-title'),
+      feat1_desc: getVal('feat1-desc'),
+      feat2_title: getVal('feat2-title'),
+      feat2_desc: getVal('feat2-desc')
+    }
+  };
+  await postJSON('/api/save-config', updated);
+  allConfig = updated;
+  toast('Website copy saved!');
+}
+
+// ===== SETTINGS SAVE =====
+async function saveAllSettings(e) {
+  e.preventDefault();
+
+  const showrooms = Array.from(document.querySelectorAll('.showroom-input')).map(i => i.value.trim()).filter(Boolean);
+  const services = Array.from(document.querySelectorAll('.svc-block')).map(el => ({
+    id: el.querySelector('.svc-id').value.trim() || 'service-' + Date.now(),
+    title: el.querySelector('.svc-title').value.trim(),
+    desc: el.querySelector('.svc-desc').value.trim()
+  })).filter(s => s.title);
+
+  const updated = {
+    ...allConfig,
+    brand: {
+      logo_title: getVal('brand-title'),
+      logo_subtitle: getVal('brand-sub'),
+      about_desc: getVal('brand-about')
+    },
+    customizer_pricing: {
+      metal: {
+        platinum: +getVal('price-platinum'),
+        'yellow-gold': +getVal('price-yellow-gold'),
+        'white-gold': +getVal('price-white-gold'),
+        'rose-gold': +getVal('price-rose-gold')
+      },
+      gem: {
+        diamond: +getVal('price-diamond'),
+        emerald: +getVal('price-emerald'),
+        sapphire: +getVal('price-sapphire'),
+        ruby: +getVal('price-ruby')
+      },
+      design: {
+        solitaire: +getVal('price-solitaire'),
+        halo: +getVal('price-halo'),
+        threestone: +getVal('price-threestone')
+      }
+    },
+    showrooms,
+    booking_services: services
+  };
+
+  await postJSON('/api/save-config', updated);
+  allConfig = updated;
+  toast('All settings saved!');
+}
+
+// ===== SHOWROOMS =====
+function renderShowrooms(list) {
+  const container = document.getElementById('showrooms-list');
+  container.innerHTML = list.map((loc, i) => `
+    <div class="showroom-item">
+      <input type="text" class="form-input showroom-input" value="${escHtml(loc)}" placeholder="City (Landmark)">
+      <button type="button" class="btn-remove" onclick="this.parentElement.remove()"><i class="fa-solid fa-trash"></i></button>
+    </div>`).join('');
+}
+
+function addShowroom() {
+  const container = document.getElementById('showrooms-list');
+  const div = document.createElement('div');
+  div.className = 'showroom-item';
+  div.innerHTML = `<input type="text" class="form-input showroom-input" placeholder="City (Landmark)"><button type="button" class="btn-remove" onclick="this.parentElement.remove()"><i class="fa-solid fa-trash"></i></button>`;
+  container.appendChild(div);
+}
+
+// ===== BOOKING SERVICES =====
+function renderServices(list) {
+  document.getElementById('services-list').innerHTML = list.map((s, i) => serviceBlock(s)).join('');
+}
+
+function serviceBlock(s = {}) {
+  return `<div class="acard svc-block" style="margin-bottom:14px;padding:20px 24px">
+    <input type="hidden" class="svc-id" value="${s.id || ''}">
+    <div class="grid-2col">
+      <div class="form-group"><label>Service Title</label><input type="text" class="form-input svc-title" value="${escHtml(s.title||'')}"></div>
+      <div class="form-group" style="align-self:end"><button type="button" class="btn-remove" style="width:100%" onclick="this.closest('.svc-block').remove()"><i class="fa-solid fa-trash" style="margin-right:6px"></i>Remove</button></div>
+    </div>
+    <div class="form-group"><label>Description</label><input type="text" class="form-input svc-desc" value="${escHtml(s.desc||'')}"></div>
+  </div>`;
+}
+
+function addService() {
+  const el = document.createElement('div');
+  el.innerHTML = serviceBlock();
+  document.getElementById('services-list').appendChild(el.firstElementChild);
+}
+
+// ===== PRODUCTS =====
+async function loadProducts() {
+  try {
+    const r = await fetch('data/products.json');
+    allProducts = await r.json();
+    renderProdTable();
+  } catch(e) {}
+}
+
+function renderProdTable() {
+  const tbody = document.getElementById('prod-table-body');
+  tbody.innerHTML = allProducts.map((p, i) => `
+    <tr>
+      <td><img src="${p.img}" class="prod-thumb" alt="" onerror="this.src='assets/jewelry_hero_bg.png'"></td>
+      <td style="color:var(--color-text-primary);font-weight:500">${escHtml(p.title)}</td>
+      <td style="text-transform:capitalize">${p.category}</td>
+      <td style="font-family:var(--font-serif);color:var(--color-gold-light)">${p.price}</td>
+      <td>${p.badge ? `<span class="card-badge" style="position:static;font-size:8px">${p.badge}</span>` : '—'}</td>
+      <td style="text-align:right">
+        <button class="btn btn-secondary" onclick="openProdModal(${i})" style="padding:6px 12px;font-size:10px;margin-right:5px"><i class="fa-solid fa-pen"></i></button>
+        <button class="btn btn-secondary" onclick="deleteProduct(${i})" style="padding:6px 12px;font-size:10px;border-color:#ff4d4d;color:#ff4d4d"><i class="fa-solid fa-trash"></i></button>
+      </td>
+    </tr>`).join('') || `<tr><td colspan="6" style="text-align:center;color:var(--color-text-muted);padding:30px">No products yet. Add your first piece!</td></tr>`;
+}
+
+function openProdModal(idx = -1) {
+  document.getElementById('prod-modal').classList.add('open');
+  document.getElementById('prod-modal-title').textContent = idx >= 0 ? 'Edit Collection Item' : 'Add New Collection Item';
+  document.getElementById('prod-idx').value = idx;
+  if (idx >= 0) {
+    const p = allProducts[idx];
+    document.getElementById('prod-id').value = p.id;
+    setVal('p-title', p.title); setVal('p-price', p.price);
+    setVal('p-cat', p.category); setVal('p-badge', p.badge || '');
+    setVal('p-img', p.img); setVal('p-desc', p.desc);
+    setVal('p-stock', p.stock || 0);
+    document.getElementById('p-enabled').checked = p.enabled !== false;
+    setVal('s-metal', p.specs?.metal || ''); setVal('s-gem', p.specs?.gemstone || '');
+    setVal('s-carats', p.specs?.carats || ''); setVal('s-clarity', p.specs?.clarity || '');
+    const stdk = ['metal','gemstone','carats','clarity'];
+    const ek = Object.keys(p.specs||{}).find(k => !stdk.includes(k));
+    setVal('s-extra-k', ek || ''); setVal('s-extra-v', ek ? p.specs[ek] : '');
+  } else {
+    document.getElementById('prod-idx').value = -1;
+    document.getElementById('prod-id').value = 'item-' + Date.now();
+    ['p-title','p-price','p-badge','p-img','p-desc','s-metal','s-gem','s-carats','s-clarity','s-extra-k','s-extra-v'].forEach(id => setVal(id,''));
+    setVal('p-stock', 5);
+    document.getElementById('p-enabled').checked = true;
+    setVal('p-cat', 'rings');
+  }
+}
+
+function closeProdModal() { document.getElementById('prod-modal').classList.remove('open'); }
+
+async function submitProduct(e) {
+  e.preventDefault();
+  const idx = parseInt(getVal('prod-idx'));
+  const specs = { metal: getVal('s-metal'), gemstone: getVal('s-gem'), carats: getVal('s-carats'), clarity: getVal('s-clarity') };
+  const ek = getVal('s-extra-k').trim().toLowerCase();
+  const ev = getVal('s-extra-v').trim();
+  if (ek && ev) specs[ek] = ev;
+  const item = { 
+    id: getVal('prod-id'), 
+    category: getVal('p-cat'), 
+    title: getVal('p-title'), 
+    price: getVal('p-price'), 
+    img: getVal('p-img'), 
+    badge: getVal('p-badge'), 
+    desc: getVal('p-desc'), 
+    stock: parseInt(getVal('p-stock')) || 0,
+    enabled: document.getElementById('p-enabled').checked,
+    specs 
+  };
+  if (idx >= 0) allProducts[idx] = item; else allProducts.push(item);
+  await postJSON('/api/save-products', allProducts);
+  renderProdTable(); closeProdModal(); updateStats();
+  toast(idx >= 0 ? 'Product updated!' : 'New product added!');
+}
+
+async function deleteProduct(idx) {
+  if (!confirm(`Remove "${allProducts[idx].title}"?`)) return;
+  const name = allProducts[idx].title;
+  allProducts.splice(idx, 1);
+  await postJSON('/api/save-products', allProducts);
+  renderProdTable(); updateStats();
+  toast('Product removed.');
+}
+
+// ===== MESSAGES =====
+async function loadMessages() {
+  try {
+    const r = await fetch('/api/get-messages');
+    allMessages = await r.json();
+    if (!Array.isArray(allMessages)) allMessages = [];
+    renderMessages();
+    updateStats();
+  } catch(e) {
+    document.getElementById('messages-container').innerHTML = `<p style="color:#ff6b6b;font-size:13px"><i class="fa-solid fa-triangle-exclamation" style="margin-right:6px"></i>Could not reach server.</p>`;
+  }
+}
+
+function renderMessages() {
+  const container = document.getElementById('messages-container');
+  if (!allMessages.length) {
+    container.innerHTML = `<div class="acard" style="text-align:center;padding:50px"><i class="fa-solid fa-inbox" style="font-size:36px;color:var(--color-text-muted);display:block;margin-bottom:16px"></i><p style="color:var(--color-text-muted)">No customer messages yet. They will appear here when visitors submit the booking form.</p></div>`;
+    return;
+  }
+  container.innerHTML = allMessages.map(msg => {
+    const badgeCls = msg.status === 'unread' ? 'badge-unread' : msg.status === 'replied' ? 'badge-replied' : 'badge-read';
+    const badgeTxt = msg.status === 'unread' ? 'Unread' : msg.status === 'replied' ? 'Replied' : 'Read';
+    const repliesHtml = (msg.replies || []).map(r => `
+      <div class="reply-bubble">
+        <div class="reply-meta">Admin replied · ${fmtDate(r.timestamp)}</div>
+        ${escHtml(r.text)}
+      </div>`).join('');
+    return `
+      <div class="msg-card ${msg.status}" onclick="openReplyModal('${msg.id}')">
+        <div class="msg-header">
+          <span class="msg-name">${escHtml(msg.name)} <span class="badge ${badgeCls}" style="margin-left:8px">${badgeTxt}</span></span>
+          <span class="msg-time">${fmtDate(msg.timestamp)}</span>
+        </div>
+        <div class="msg-meta"><i class="fa-solid fa-envelope" style="margin-right:5px;color:var(--color-gold)"></i>${escHtml(msg.email)}
+          ${msg.service ? ` &nbsp;·&nbsp; <i class="fa-solid fa-calendar" style="margin-right:4px;color:var(--color-gold)"></i>${escHtml(msg.service)}` : ''}
+          ${msg.date ? ` · ${escHtml(msg.date)} at ${escHtml(msg.time)}` : ''}
+        </div>
+        ${msg.notes ? `<div class="msg-note">"${escHtml(msg.notes)}"</div>` : ''}
+        ${repliesHtml ? `<div class="msg-replies">${repliesHtml}</div>` : ''}
+      </div>`;
+  }).join('');
+}
+
+function openReplyModal(id) {
+  currentMsgId = id;
+  const msg = allMessages.find(m => m.id === id);
+  if (!msg) return;
+  // Mark as read if unread
+  if (msg.status === 'unread') {
+    fetch('/api/mark-read', { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({id}) });
+    msg.status = 'read';
+    renderMessages();
+  }
+  document.getElementById('reply-msg-detail').innerHTML = `
+    <div style="background:rgba(0,0,0,0.3);border:1px solid var(--color-border);padding:18px;margin-bottom:14px">
+      <div style="margin-bottom:8px"><strong>${escHtml(msg.name)}</strong> &lt;${escHtml(msg.email)}&gt;</div>
+      ${msg.service ? `<div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:4px">Service: ${escHtml(msg.service)}${msg.date ? ` · ${escHtml(msg.date)} at ${escHtml(msg.time)}` : ''}</div>` : ''}
+      ${msg.notes ? `<div style="font-size:13px;margin-top:8px;color:var(--color-text-secondary);font-style:italic">"${escHtml(msg.notes)}"</div>` : ''}
+      ${(msg.replies||[]).length ? `<div style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.05)"><strong style="font-size:11px;color:var(--color-gold)">PREVIOUS REPLIES</strong>${(msg.replies).map(r=>`<div style="font-size:12px;margin-top:8px;color:var(--color-text-secondary)">${fmtDate(r.timestamp)}: ${escHtml(r.text)}</div>`).join('')}</div>` : ''}
+    </div>`;
+  document.getElementById('reply-text').value = '';
+  document.getElementById('reply-modal').classList.add('open');
+}
+
+function closeReplyModal() {
+  document.getElementById('reply-modal').classList.remove('open');
+  currentMsgId = null;
+}
+
+async function sendReply() {
+  const text = document.getElementById('reply-text').value.trim();
+  if (!text) { alert('Please type a reply.'); return; }
+  const r = await postJSON('/api/reply-message', { id: currentMsgId, reply: text });
+  if (r?.success) {
+    toast('Reply sent and saved!');
+    closeReplyModal();
+    await loadMessages();
+  } else {
+    alert('Error sending reply: ' + (r?.error || 'Unknown error'));
+  }
+}
+
+// ===== CHECKOUT ORDERS MANAGEMENT =====
+async function loadOrders() {
+  try {
+    const r = await fetch('/api/get-orders');
+    allOrders = await r.json();
+    if (!Array.isArray(allOrders)) allOrders = [];
+    renderOrdersTable();
+    updateStats();
+  } catch(e) { console.error('Orders sync failed', e); }
+}
+
+function renderOrdersTable() {
+  const tbody = document.getElementById('orders-table-body');
+  if (!tbody) return;
+  tbody.innerHTML = allOrders.map(o => `
+    <tr>
+      <td><strong style="color:var(--color-gold-light)">${o.id}</strong></td>
+      <td>${escHtml(o.shipping?.name || 'Customer')} (${escHtml(o.shipping?.email || 'N/A')})</td>
+      <td>${escHtml(o.shipping?.address || '')}, ${escHtml(o.shipping?.city || '')}</td>
+      <td style="font-family:var(--font-serif);color:var(--color-gold-light)">${o.total}</td>
+      <td>
+        <span class="badge ${o.status === 'Delivered' ? 'badge-replied' : o.status === 'Cancelled' ? 'badge-unread' : 'badge-read'}">${o.status}</span>
+      </td>
+      <td style="text-align:right">
+        <select onchange="updateOrderStatus('${o.id}', this.value)" style="background:#0e0e0e;border:1px solid var(--color-border);color:#fff;padding:6px;font-size:12px;outline:none;margin-right:8px;">
+          <option value="Processing" ${o.status === 'Processing' ? 'selected' : ''}>Processing</option>
+          <option value="Shipped" ${o.status === 'Shipped' ? 'selected' : ''}>Shipped</option>
+          <option value="Delivered" ${o.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
+          <option value="Cancelled" ${o.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+        </select>
+        <button class="btn btn-secondary" onclick="viewOrderDetails('${o.id}')" style="padding:6px 12px;font-size:10px;"><i class="fa-solid fa-eye"></i></button>
+      </td>
+    </tr>
+  `).join('') || `<tr><td colspan="6" style="text-align:center;color:var(--color-text-muted);padding:30px">No checkout orders placed yet.</td></tr>`;
+}
+
+async function updateOrderStatus(orderId, status) {
+  const res = await postJSON('/api/update-order-status', { id: orderId, status });
+  if (res?.success) {
+    toast(`Order ${orderId} updated to ${status}`);
+    await loadOrders();
+  } else {
+    alert('Failed to update status');
+  }
+}
+
+function viewOrderDetails(id) {
+  const order = allOrders.find(o => o.id === id);
+  if (!order) return;
+  const itemsList = order.items.map(item => `  - ${item.product.title} x${item.quantity} (${item.variant.Metal || 'Default Metal'}${item.variant.Size ? ` / Size ${item.variant.Size}` : ''})`).join('\n');
+  alert(`Order Details [${order.id}]\n\nClient Name: ${order.shipping.name}\nEmail: ${order.shipping.email}\nAddress: ${order.shipping.address}, ${order.shipping.city} ${order.shipping.zip}\n\nOrdered Pieces:\n${itemsList}\n\nInvoice Total: ${order.total}\nPayment Method: Stripe Simulated Authorization`);
+}
+
+// ===== CLIENT DIRECTORY =====
+async function loadCustomers() {
+  try {
+    const r = await fetch('/api/get-users');
+    allCustomers = await r.json();
+    if (!Array.isArray(allCustomers)) allCustomers = [];
+    renderCustomersTable();
+  } catch(e) { console.error('Customers sync failed', e); }
+}
+
+function renderCustomersTable() {
+  const tbody = document.getElementById('customers-table-body');
+  if (!tbody) return;
+  tbody.innerHTML = allCustomers.map(c => `
+    <tr>
+      <td style="color:#fff;font-weight:500">${escHtml(c.name || 'N/A')}</td>
+      <td>${escHtml(c.email)}</td>
+      <td><span class="badge badge-read">${escHtml(c.role || 'customer')}</span></td>
+    </tr>
+  `).join('') || `<tr><td colspan="3" style="text-align:center;color:var(--color-text-muted);padding:30px">No customer accounts registered.</td></tr>`;
+}
+
+// ===== PROMO COUPONS =====
+function renderCouponsTable() {
+  const tbody = document.getElementById('coupons-table-body');
+  if (!tbody) return;
+  const codes = allConfig.discount_codes || [];
+  tbody.innerHTML = codes.map((c, i) => `
+    <tr>
+      <td><strong style="color:var(--color-gold)">${escHtml(c.code)}</strong></td>
+      <td style="color:var(--color-gold-light)">${c.rate * 100}% Discount</td>
+      <td>${escHtml(c.desc || '')}</td>
+      <td style="text-align:right">
+        <button class="btn btn-secondary" onclick="deleteCoupon(${i})" style="padding:6px 12px;font-size:10px;border-color:#ff4d4d;color:#ff4d4d"><i class="fa-solid fa-trash"></i></button>
+      </td>
+    </tr>
+  `).join('') || `<tr><td colspan="4" style="text-align:center;color:var(--color-text-muted);padding:30px">No active discount codes. Click "Add Coupon" to create one.</td></tr>`;
+}
+
+function openCouponModal() {
+  document.getElementById('coupon-modal').classList.add('open');
+  document.getElementById('c-code').value = '';
+  document.getElementById('c-rate').value = '';
+  document.getElementById('c-desc').value = '';
+}
+
+function closeCouponModal() {
+  document.getElementById('coupon-modal').classList.remove('open');
+}
+
+async function submitCoupon(e) {
+  e.preventDefault();
+  const code = document.getElementById('c-code').value.toUpperCase().trim();
+  const rate = parseFloat(document.getElementById('c-rate').value);
+  const desc = document.getElementById('c-desc').value.trim();
+  
+  if (!allConfig.discount_codes) allConfig.discount_codes = [];
+  
+  const dup = allConfig.discount_codes.some(c => c.code === code);
+  if (dup) {
+    alert('Coupon code already exists');
+    return;
+  }
+  
+  allConfig.discount_codes.push({ code, rate, desc });
+  
+  const r = await postJSON('/api/save-config', allConfig);
+  if (r?.success) {
+    toast('Discount code created successfully!');
+    closeCouponModal();
+    renderCouponsTable();
+    updateStats();
+  } else {
+    alert('Failed to save coupon code');
+  }
+}
+
+async function deleteCoupon(idx) {
+  if (!confirm('Remove this discount code?')) return;
+  allConfig.discount_codes.splice(idx, 1);
+  const r = await postJSON('/api/save-config', allConfig);
+  if (r?.success) {
+    toast('Discount code removed.');
+    renderCouponsTable();
+    updateStats();
+  } else {
+    alert('Failed to delete coupon');
+  }
+}
+
+// ===== AUDIT LOG =====
+async function loadAuditLog() {
+  try {
+    const r = await fetch('/api/get-audit-log');
+    allAudit = await r.json();
+    if (!Array.isArray(allAudit)) allAudit = [];
+    renderAuditLog();
+    updateStats();
+  } catch(e) {
+    document.getElementById('audit-log-container').innerHTML = `<p style="color:#ff6b6b;font-size:13px">Could not reach server.</p>`;
+  }
+}
+
+const ACTION_ICONS = {
+  catalog_update: 'fa-layer-group',
+  config_update: 'fa-sliders',
+  media_upload: 'fa-cloud-arrow-up',
+  message_reply: 'fa-reply',
+  tab_visit: 'fa-eye',
+  order_created: 'fa-cart-plus',
+  order_status_update: 'fa-truck-ramp-box',
+  user_signup: 'fa-user-check',
+  default: 'fa-circle-dot'
+};
+
+function renderAuditLog() {
+  const container = document.getElementById('audit-log-container');
+  if (!allAudit.length) {
+    container.innerHTML = `<p style="color:var(--color-text-muted);font-size:13px;text-align:center;padding:30px 0">No audit entries yet. Actions you take in the Admin Console will be logged here.</p>`;
+    return;
+  }
+  container.innerHTML = allAudit.map(entry => {
+    const icon = ACTION_ICONS[entry.action] || ACTION_ICONS.default;
+    return `
+      <div class="audit-entry">
+        <div class="audit-icon"><i class="fa-solid ${icon}"></i></div>
+        <div class="audit-body">
+          <div class="audit-action">${formatActionLabel(entry.action)}</div>
+          <div class="audit-details">${escHtml(entry.details || '')}</div>
+          <div class="audit-time">${fmtDate(entry.timestamp)} · by ${entry.user || 'admin'}</div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function formatActionLabel(action) {
+  const labels = {
+    catalog_update: '📦 Catalog Updated',
+    config_update: '⚙️ Configuration Changed',
+    media_upload: '🖼 Media Uploaded',
+    message_reply: '💬 Customer Reply Sent',
+    tab_visit: '👁 Admin Tab Visited',
+    order_created: '🛒 Order Placed',
+    order_status_update: '🚚 Shipment Dispatched',
+    user_signup: '👤 New Client Register'
+  };
+  return labels[action] || action.replace(/_/g, ' ');
+}
+
+// ===== MEDIA =====
+async function loadMedia() {
+  renderMediaGrid();
+}
+
+function renderMediaGrid() {
+  const grid = document.getElementById('media-grid');
+  grid.innerHTML = currentMediaUrls.map(url => `
+    <div class="media-thumb" onclick="copyUrl('${url}')">
+      <img src="${url}" alt="" onerror="this.parentElement.style.display='none'">
+      <div class="media-thumb-overlay"><i class="fa-solid fa-copy" style="font-size:16px;color:var(--color-gold);margin-bottom:4px"></i><span>Copy Path</span></div>
+    </div>`).join('');
+}
+
+async function uploadMedia(input) {
+  const file = input.files[0]; if (!file) return;
+  const fd = new FormData(); fd.append('image', file);
+  const r = await fetch('/api/upload-image', { method: 'POST', body: fd }).then(r => r.json());
+  if (r.success) { currentMediaUrls.unshift(r.url); renderMediaGrid(); toast(`Uploaded: ${r.url}`); }
+  else { alert('Upload failed: ' + r.error); }
+  input.value = '';
+}
+
+async function uploadProdPhoto(input) {
+  const file = input.files[0]; if (!file) return;
+  const fd = new FormData(); fd.append('image', file);
+  const r = await fetch('/api/upload-image', { method: 'POST', body: fd }).then(r => r.json());
+  if (r.success) { setVal('p-img', r.url); currentMediaUrls.unshift(r.url); renderMediaGrid(); }
+  else { alert('Upload failed: ' + r.error); }
+  input.value = '';
+}
+
+function copyUrl(url) {
+  navigator.clipboard.writeText(url).then(() => toast(`Copied: ${url}`));
+}
+
+// ===== HELPERS =====
+async function postJSON(url, data) {
+  try {
+    const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+    return await r.json();
+  } catch(e) { console.error(e); return { success: false, error: e.message }; }
+}
+
+async function logAction(action, details) {
+  try {
+    await fetch('/api/log-action', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({action, details, user:'admin'}) });
+  } catch(e) {}
+}
+
+function setVal(id, val) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (el.tagName === 'SELECT') el.value = val;
+  else el.value = val;
+}
+
+function getVal(id) {
+  const el = document.getElementById(id);
+  return el ? el.value : '';
+}
+
+function escHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function fmtDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'numeric'}) + ' ' + d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+}
+
+// ===== TOAST NOTIFICATION =====
+function toast(msg) {
+  const el = document.createElement('div');
+  el.textContent = msg;
+  Object.assign(el.style, {
+    position: 'fixed', bottom: '30px', right: '30px',
+    background: 'var(--color-gold-gradient)', color: '#000',
+    padding: '12px 22px', fontFamily: 'var(--font-sans)', fontSize: '13px',
+    fontWeight: '600', zIndex: '9999', boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+    opacity: '0', transition: 'opacity 0.3s'
+  });
+  document.body.appendChild(el);
+  setTimeout(() => el.style.opacity = '1', 10);
+  setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, 3000);
+}
+</script>
+</body>
+</html>

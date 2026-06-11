@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MM Fine Jewelry | Luxury & Bespoke Atelier</title>
+  <meta name="description" content="Discover exquisite hand-crafted diamond rings, luxury necklaces, and custom bridal jewelry at MM Fine Jewelry. Book a private viewing today.">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- FontAwesome for Social Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- --- HEADER / NAV --- -->
+  <header id="header">
+    <div class="container nav-container">
+      <a href="#" class="logo" id="nav-logo-txt">
+        MM JEWELRY
+        <span>International</span>
+      </a>
+      
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#hero" class="active">Home</a></li>
+          <li><a href="#collections">Collections</a></li>
+          <li><a href="#customizer">Customizer</a></li>
+          <li><a href="#tracking-section">Track Order</a></li>
+          <li><a href="#atelier">The Atelier</a></li>
+          <li><a href="#booking">Consultation</a></li>
+        </ul>
+      </nav>
+      
+      <div class="header-actions">
+        <!-- Wishlist -->
+        <button class="btn-icon" id="header-wishlist-btn" aria-label="Wishlist" style="background:none;border:none;color:#fff;cursor:pointer;position:relative;margin-right:8px;outline:none;">
+          <i class="fa-solid fa-heart" style="font-size:18px;"></i>
+          <span id="wishlist-badge" style="position:absolute;top:-8px;right:-8px;background:var(--color-gold);color:#000;font-size:9px;font-weight:700;border-radius:50%;width:16px;height:16px;display:none;align-items:center;justify-content:center;">0</span>
+        </button>
+        <!-- Shopping Cart -->
+        <button class="btn-icon" id="header-cart-btn" aria-label="Shopping Cart" style="background:none;border:none;color:#fff;cursor:pointer;position:relative;margin-right:8px;outline:none;">
+          <i class="fa-solid fa-bag-shopping" style="font-size:18px;"></i>
+          <span id="cart-badge" style="position:absolute;top:-8px;right:-8px;background:var(--color-gold);color:#000;font-size:9px;font-weight:700;border-radius:50%;width:16px;height:16px;display:none;align-items:center;justify-content:center;">0</span>
+        </button>
+        <!-- User Profile Login -->
+        <div id="user-header-portal" style="display:inline-block;margin-right:8px;vertical-align:middle;">
+          <button class="btn-icon" id="header-login-btn" aria-label="User Account" style="background:none;border:none;color:#fff;cursor:pointer;outline:none;">
+            <i class="fa-solid fa-user" style="font-size:18px;"></i>
+          </button>
+        </div>
+        <a href="#booking" class="btn btn-secondary" style="padding: 10px 20px; font-size: 10px;">Reserve</a>
+        <button class="mobile-menu-btn" aria-label="Toggle Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- --- HERO SECTION --- -->
+  <section id="hero" class="hero">
+    <div class="hero-bg"></div>
+    <div class="container">
+      <div class="hero-content">
+        <p class="hero-subtitle" id="hero-subtitle-txt">Bespoke Excellence Since 1998</p>
+        <h1 class="hero-title" id="hero-title-txt">Timeless Luxury, <br><span class="text-gold">Hand-Crafted</span> Brilliance</h1>
+        <p class="hero-desc" id="hero-desc-txt">Elevate your stories with our collection of diamonds, emeralds, and fine metals. Designed for those who value absolute distinction and master craftsmanship.</p>
+        <div class="hero-actions">
+          <a href="#collections" class="btn btn-primary">The Collections</a>
+          <a href="#customizer" class="btn btn-secondary">Design Custom</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- --- COLLECTIONS / CATALOG --- -->
+  <section id="collections" class="reveal">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-subtitle">Exquisite Artistry</p>
+        <h2 class="section-title">Curated Collections</h2>
+      </div>
+      
+      <!-- Filter Tabs -->
+      <ul class="filter-tabs">
+        <li><button class="filter-btn active" data-filter="all">All Pieces</button></li>
+        <li><button class="filter-btn" data-filter="rings">Rings</button></li>
+        <li><button class="filter-btn" data-filter="necklaces">Necklaces</button></li>
+        <li><button class="filter-btn" data-filter="earrings">Earrings</button></li>
+        <li><button class="filter-btn" data-filter="bracelets">Bracelets</button></li>
+      </ul>
+      
+      <!-- Product Grid (Populated dynamically) -->
+      <div id="collections-grid" class="items-grid">
+        <!-- JS inserts cards here -->
+      </div>
+    </div>
+  </section>
+
+  <!-- --- BEST-SELLING PRODUCTS --- -->
+  <section id="bestsellers" class="reveal" style="background: #020202; border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-subtitle">Most Coveted Creations</p>
+        <h2 class="section-title">The Best-Sellers</h2>
+      </div>
+      <div id="bestsellers-grid" class="items-grid">
+        <!-- JS inserts cards here dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- --- LIVE CUSTOMIZER SECTION --- -->
+  <section id="customizer" class="customizer-section reveal">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-subtitle">Bespoke Studio</p>
+        <h2 class="section-title">Live Atelier Customizer</h2>
+      </div>
+      
+      <div class="customizer-grid">
+        <!-- Ring Render Preview -->
+        <div class="preview-container">
+          <div class="preview-glow"></div>
+          
+          <div class="ring-visual-anchor">
+            <!-- Customized SVG Ring Shank -->
+            <svg class="svg-ring-metal" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Outer circle of ring shank -->
+              <circle cx="50" cy="58" r="26" stroke="#d4af37" stroke-width="4.5" />
+              <!-- Inner circle of ring shank -->
+              <circle cx="50" cy="58" r="21.5" stroke="#d4af37" stroke-width="1" stroke-opacity="0.3" />
+              <!-- Gem setting claws / shoulders -->
+              <path d="M43 34.5 C43 34.5, 45 31, 50 31 C55 31, 57 34.5, 57 34.5" stroke="#d4af37" stroke-width="3" stroke-linecap="round" />
+              <path d="M41 36.5 L46 30" stroke="#d4af37" stroke-width="1.8" stroke-linecap="round" />
+              <path d="M59 36.5 L54 30" stroke="#d4af37" stroke-width="1.8" stroke-linecap="round" />
+            </svg>
+            
+            <!-- Floating gemstone rendering -->
+            <div class="gemstone-render"></div>
+          </div>
+          
+          <div class="customizer-details-overlay">
+            <span class="customizer-tag">Virtual Prototype</span>
+          </div>
+        </div>
+        
+        <!-- Controls panel -->
+        <div class="control-panel">
+          <div>
+            <h3 class="panel-title">Configure Your Piece</h3>
+            <p class="panel-intro">Select your precious metals, center gemstones, and design profiles below to receive an instant bespoke estimate.</p>
+          </div>
+          
+          <!-- Metal selector -->
+          <div class="customizer-group">
+            <span class="group-label">Precious Metal</span>
+            <div class="option-selectors">
+              <button class="option-btn active" data-opt="metal" data-val="platinum">
+                <span class="color-dot dot-platinum"></span> Platinum 950
+              </button>
+              <button class="option-btn" data-opt="metal" data-val="yellow-gold">
+                <span class="color-dot dot-gold"></span> 18K Yellow Gold
+              </button>
+              <button class="option-btn" data-opt="metal" data-val="white-gold">
+                <span class="color-dot dot-white-gold"></span> 18K White Gold
+              </button>
+              <button class="option-btn" data-opt="metal" data-val="rose-gold">
+                <span class="color-dot dot-rose-gold"></span> 18K Rose Gold
+              </button>
+            </div>
+          </div>
+          
+          <!-- Gemstone selector -->
+          <div class="customizer-group">
+            <span class="group-label">Gemstone Type</span>
+            <div class="option-selectors">
+              <button class="option-btn active" data-opt="gem" data-val="diamond">
+                <span class="color-dot dot-diamond"></span> Diamond
+              </button>
+              <button class="option-btn" data-opt="gem" data-val="emerald">
+                <span class="color-dot dot-emerald"></span> Emerald
+              </button>
+              <button class="option-btn" data-opt="gem" data-val="sapphire">
+                <span class="color-dot dot-sapphire"></span> Sapphire
+              </button>
+              <button class="option-btn" data-opt="gem" data-val="ruby">
+                <span class="color-dot dot-ruby"></span> Ruby
+              </button>
+            </div>
+          </div>
+          
+          <!-- Design style selector -->
+          <div class="customizer-group">
+            <span class="group-label">Setting Style</span>
+            <div class="option-selectors">
+              <button class="option-btn active" data-opt="design" data-val="solitaire">Classic Solitaire</button>
+              <button class="option-btn" data-opt="design" data-val="halo">Halo Vintage</button>
+              <button class="option-btn" data-opt="design" data-val="threestone">Three-Stone Royal</button>
+            </div>
+          </div>
+          
+          <!-- Price summary -->
+          <div class="price-summary">
+            <div class="summary-details">
+              <span class="group-label">Bespoke Estimate</span>
+              <span id="custom-spec" class="custom-spec-text">Platinum 950 / Diamond / Solitaire</span>
+            </div>
+            <div class="custom-price" id="customizer-price-text">$8,900</div>
+          </div>
+          
+          <div>
+            <button class="btn btn-primary btn-booking-next" style="width: 100%;" id="customizer-order-btn">Order Custom Piece</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- --- AI DESIGN & TRY-ON VAULT --- -->
+  <section id="ai-vault" class="reveal" style="background: radial-gradient(circle at center, #0e0e0e 0%, #050505 100%); border-bottom: 1px solid var(--color-border); padding: 100px 0;">
+    <div class="container">
+      <div class="customizer-grid">
+        <div>
+          <p class="section-subtitle">AI Concept Studio</p>
+          <h2 style="font-size:36px; margin-bottom:15px; font-weight:300;">Generate Fine Jewelry Mockups</h2>
+          <p style="color:var(--color-text-secondary); margin-bottom:25px; font-size:14px; line-height:1.7;">
+            Describe your dream bespoke jewelry design. The MM AI Atelier engine will visually synthesize custom concepts instantly to capture your creative spark.
+          </p>
+          <form id="ai-generator-form" style="display:flex; gap:10px;">
+            <input type="text" id="ai-prompt-input" class="form-input" style="flex:1;" placeholder="e.g., White gold emerald halo ring with micro pave diamonds..." required>
+            <button type="submit" class="btn btn-primary" style="padding:0 24px;"><i class="fa-solid fa-wand-magic-sparkles"></i> Render</button>
+          </form>
+        </div>
+        <div style="display:flex; justify-content:center;">
+          <div id="ai-result-box" style="width:100%; max-width:380px; aspect-ratio:1; border:1px dashed var(--color-border); display:flex; align-items:center; justify-content:center; background:#000; position:relative; overflow:hidden;">
+            <div style="color:var(--color-text-muted); text-align:center; padding:30px; font-size:13px;" id="ai-placeholder-msg">
+              <i class="fa-solid fa-wand-magic-sparkles" style="font-size:24px; color:var(--color-gold); display:block; margin-bottom:12px;"></i>
+              Specify a prompt to generate concept mockup
+            </div>
+            <img id="ai-generated-img" src="" alt="AI concept" style="width:100%; height:100%; object-fit:cover; display:none;">
+            <div id="ai-loading-indicator" style="display:none; color:var(--color-gold); text-align:center;">
+              <i class="fa-solid fa-circle-notch fa-spin" style="font-size:24px; margin-bottom:8px; display:block;"></i>
+              <p style="font-size:11px; text-transform:uppercase; letter-spacing:0.15em;">Atelier AI Rendering...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- --- ATELIER / STORY SECTION --- -->
+  <section id="atelier" class="reveal">
+    <div class="container">
+      <div class="atelier-grid">
+        <div class="atelier-images">
+          <img class="atelier-img-1" src="https://images.unsplash.com/photo-1531747118685-ca8fa6e08806?auto=format&fit=crop&q=80&w=600" alt="Master craftsman working on diamond setting" loading="lazy">
+          <img class="atelier-img-2" src="https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&q=80&w=600" alt="Exquisite sketch of bespoke ring" loading="lazy">
+        </div>
+        
+        <div class="atelier-content">
+          <p class="section-subtitle" id="atelier-subtitle-txt">Heritage & Philosophy</p>
+          <h2 class="atelier-title" id="atelier-title-txt">The Craftsmanship Behind MM Fine Jewelry</h2>
+          <p class="atelier-text" id="atelier-text1-txt">Every master creation inside the MM Atelier begins its life as a pencil stroke on tracing paper. Our world-renowned lapidaries select only the most outstanding gemstones, sourcing them ethically from locations known for historic purity.</p>
+          <p class="atelier-text" id="atelier-text2-txt">Hand-forged by master goldsmiths using traditional heating methods and modern design refinements, each ring, necklace, and bangle holds a presence that transcends fashion cycles. We produce only a small batch of fine jewelry each season, preserving rarity and value.</p>
+          
+          <div class="atelier-features">
+            <div class="feat-item">
+              <h4 id="atelier-feat1-title-txt">Bespoke Heritage</h4>
+              <p id="atelier-feat1-desc-txt">Tailor jewelry pieces matching your personal history with our specialized private designers.</p>
+            </div>
+            <div class="feat-item">
+              <h4 id="atelier-feat2-title-txt">Conflict-Free Gems</h4>
+              <p id="atelier-feat2-desc-txt">Every single gemstone has been certified under strict Kimberly process agreements.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- --- TESTIMONIALS SECTION --- -->
+  <section id="testimonials" class="reveal" style="background:#050505; border-top:1px solid var(--color-border); padding: 100px 0;">
+    <div class="container" style="text-align: center;">
+      <p class="section-subtitle">Client Stories</p>
+      <h2 class="section-title">Atelier Testimonials</h2>
+      <div style="max-width:800px; margin: 50px auto 0; position:relative;" class="glass-panel">
+        <div style="padding: 50px; min-height: 220px;" id="testimonial-slide-box">
+          <div style="display:flex; justify-content:center; gap:4px; margin-bottom:20px; color:var(--color-gold);">
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+          </div>
+          <p style="font-family: var(--font-serif); font-size:22px; font-style:italic; line-height:1.6; color:var(--color-gold-light); margin-bottom:25px;" id="testimonial-text">
+            "The Signature Solitaire is absolute perfection. The sparkle from the platinum setting exceeds all of my expectations. Exceptional service."
+          </p>
+          <h4 style="font-family: var(--font-sans); font-size:12px; font-weight:600; letter-spacing:0.2em; text-transform:uppercase;" id="testimonial-author">
+            Alexandra Sterling
+          </h4>
+        </div>
+        <!-- Slide controls -->
+        <div style="display:flex; justify-content:center; gap:15px; padding-bottom:30px;">
+          <button type="button" id="prev-testi-btn" style="background:none; border:1px solid var(--color-border); color:#fff; width:36px; height:36px; cursor:pointer;"><i class="fa-solid fa-chevron-left"></i></button>
+          <button type="button" id="next-testi-btn" style="background:none; border:1px solid var(--color-border); color:#fff; width:36px; height:36px; cursor:pointer;"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- --- ORDER TRACKING SECTION --- -->
+  <section id="tracking-section" class="reveal" style="background:radial-gradient(circle at center, #0e0e0e 0%, #050505 100%); border-top:1px solid var(--color-border); border-bottom:1px solid var(--color-border); padding: 100px 0;">
+    <div class="container">
+      <div style="max-width: 720px; margin: 0 auto; text-align: center;">
+        <p class="section-subtitle">Real-Time Delivery</p>
+        <h2 style="font-size:36px; margin-bottom:15px; font-weight:300;">Track Your Fine Jewelry Shipment</h2>
+        <p style="color:var(--color-text-secondary); margin-bottom:35px; font-size:14px;">
+          Input your 8-digit Order Tracking ID below to view the transit state of your master jewelry piece.
+        </p>
+        <form id="tracking-search-form" style="display:flex; gap:10px; margin-bottom:40px;">
+          <input type="text" id="tracking-id-input" class="form-input" style="flex:1;" placeholder="Order ID (e.g. MM-482910)" required>
+          <button type="submit" class="btn btn-primary" style="padding:0 28px;"><i class="fa-solid fa-magnifying-glass"></i> Track</button>
+        </form>
+        
+        <!-- Tracking Visual Timeline -->
+        <div id="tracking-visual-timeline" style="display:none;" class="glass-panel">
+          <div style="padding: 40px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:25px; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:15px; text-align:left;">
+              <div>
+                <span style="font-size:10px; color:var(--color-text-muted); text-transform:uppercase;">Registration ID</span>
+                <h4 id="track-order-id-label" style="color:var(--color-gold); font-size:16px; margin-top:3px;">MM-123456</h4>
+              </div>
+              <div style="text-align:right;">
+                <span style="font-size:10px; color:var(--color-text-muted); text-transform:uppercase;">Shipment Value</span>
+                <p id="track-order-total-label" style="color:#fff; font-size:15px; margin-top:3px;">$0.00</p>
+              </div>
+            </div>
+            
+            <div class="tracking-path">
+              <div class="tracking-line-bg"></div>
+              <div class="tracking-line-active" id="tracking-progress-bar" style="width: 0%;"></div>
+              
+              <div class="tracking-node" id="node-ordered">
+                <div class="tracking-node-icon"><i class="fa-solid fa-box-open"></i></div>
+                <span class="tracking-node-label">Ordered</span>
+              </div>
+              <div class="tracking-node" id="node-processing">
+                <div class="tracking-node-icon"><i class="fa-solid fa-spinner fa-spin"></i></div>
+                <span class="tracking-node-label">Processing</span>
+              </div>
+              <div class="tracking-node" id="node-shipped">
+                <div class="tracking-node-icon"><i class="fa-solid fa-truck-fast"></i></div>
+                <span class="tracking-node-label">Shipped</span>
+              </div>
+              <div class="tracking-node" id="node-delivered">
+                <div class="tracking-node-icon"><i class="fa-solid fa-circle-check"></i></div>
+                <span class="tracking-node-label">Delivered</span>
+              </div>
+            </div>
+            
+            <div style="text-align:left; font-size:13px; color:var(--color-text-secondary); margin-top:30px; border-top:1px solid rgba(255,255,255,0.05); padding-top:20px;" id="track-summary-label">
+              <!-- Dynamically written details -->
+            </div>
+          </div>
+        </div>
+        
+        <div id="tracking-error-box" style="display:none; color:#ff4d4d; border:1px solid rgba(255,77,77,0.3); background:rgba(255,77,77,0.05); padding:15px; font-size:13px;">
+          Order ID not registered. Please double check the ID number or contact concierge.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- --- PRIVATE BOOKING / RESERVATIONS --- -->
+  <section id="booking" class="booking-section reveal">
+    <div class="container">
+      <div class="booking-wrapper">
+        <div class="booking-header">
+          <p class="section-subtitle">VIP Reservations</p>
+          <h3>Schedule a Private Viewing</h3>
+          <p>Book a personal virtual consultation or a private viewing at our executive showroom suites.</p>
+        </div>
+        
+        <!-- Step indicators -->
+        <div class="step-indicator">
+          <div class="step-dot active">1</div>
+          <div class="step-dot">2</div>
+          <div class="step-dot">3</div>
+        </div>
+        
+        <!-- Form structure -->
+        <form id="booking-multi-step">
+          <!-- Step 1: Select Service -->
+          <div class="booking-step active" data-step="1">
+            <div class="form-group">
+              <label>Select Consultation Experience</label>
+              <div class="service-selector" id="booking-service-cards-container">
+                <!-- Dynamically loaded from config.json -->
+              </div>
+            </div>
+            
+            <div class="booking-actions" style="justify-content: flex-end;">
+              <button type="button" class="btn btn-primary btn-booking-next">Next Step <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i></button>
+            </div>
+          </div>
+          
+          <!-- Step 2: Date & Time -->
+          <div class="booking-step" data-step="2">
+            <div class="grid-2col">
+              <div class="form-group">
+                <label for="book-date">Preferred Date</label>
+                <input type="date" id="book-date" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label for="book-time">Preferred Time Slot</label>
+                <select id="book-time" class="form-input" required>
+                  <option value="" disabled selected>Select a slot</option>
+                  <option value="10:00 AM">10:00 AM - 11:00 AM</option>
+                  <option value="11:30 AM">11:30 AM - 12:30 PM</option>
+                  <option value="02:00 PM">02:00 PM - 03:00 PM</option>
+                  <option value="03:30 PM">03:30 PM - 04:30 PM</option>
+                  <option value="05:00 PM">05:00 PM - 06:00 PM</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="booking-actions">
+              <button type="button" class="btn btn-secondary btn-booking-prev"><i class="fa-solid fa-arrow-left" style="margin-right: 8px;"></i> Back</button>
+              <button type="button" class="btn btn-primary btn-booking-next">Next Step <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i></button>
+            </div>
+          </div>
+          
+          <!-- Step 3: Contact & Request Info -->
+          <div class="booking-step" data-step="3">
+            <div class="grid-2col">
+              <div class="form-group">
+                <label for="book-name">Full Name</label>
+                <input type="text" id="book-name" class="form-input" placeholder="e.g., Alexandra Sterling" required>
+              </div>
+              <div class="form-group">
+                <label for="book-email">Email Address</label>
+                <input type="email" id="book-email" class="form-input" placeholder="e.g., alexandra@sterling.com" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="book-notes">Special Inquiries / Gemstone Preferences</label>
+              <textarea id="book-notes" class="form-input" rows="4" placeholder="Mention preferred sizes, metals, or specific collection inquiries here..."></textarea>
+            </div>
+            
+            <div class="booking-actions">
+              <button type="button" class="btn btn-secondary btn-booking-prev"><i class="fa-solid fa-arrow-left" style="margin-right: 8px;"></i> Back</button>
+              <button type="submit" class="btn btn-primary">Submit Appointment <i class="fa-solid fa-check" style="margin-left: 8px;"></i></button>
+            </div>
+          </div>
+        </form>
+        
+        <!-- Step 4: Success View (hidden initially) -->
+        <div id="booking-success-view" class="booking-success" style="display: none; opacity: 0; transition: opacity 0.5s ease;">
+          <div class="success-icon">
+            <i class="fa-solid fa-calendar-check"></i>
+          </div>
+          <h4>Reservation Requested</h4>
+          <p>Thank you. Your private viewing request for the <strong id="summary-service">Showroom</strong> on <strong id="summary-datetime">Friday at 10 AM</strong> has been queued. Our concierge will reach out within 2 hours to confirm your slot.</p>
+          <button class="btn btn-secondary" onclick="location.reload()">Book Another Appointment</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- --- FOOTER --- -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col footer-about">
+          <a href="#" class="logo" id="footer-logo-txt">
+            MM JEWELRY
+            <span>International</span>
+          </a>
+          <p id="footer-about-txt">Redefining luxury since 1998 with hand-selected gemstones, immaculate shapes, and premium platinum and gold bands.</p>
+        </div>
+        
+        <div class="footer-col">
+          <h4>Atelier</h4>
+          <ul>
+            <li><a href="#collections">The Collections</a></li>
+            <li><a href="#customizer">Custom Ring Studio</a></li>
+            <li><a href="#atelier">The Craftsmanship</a></li>
+            <li><a href="#booking">Book Appointment</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h4>Showrooms</h4>
+          <ul id="footer-showrooms-list">
+            <!-- Dynamically populated from config.json -->
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h4>Newsletter</h4>
+          <p style="font-size: 12px; color: var(--color-text-secondary); line-height: 1.6;">Receive notifications of limited edition collections, invitations to private sales, and seasonal lookbooks.</p>
+          <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Thank you for subscribing to the MM Atelier Lookbook.'); this.reset();">
+            <input type="email" class="newsletter-input" placeholder="Your email address" required>
+            <button type="submit" class="newsletter-btn">Join</button>
+          </form>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2026 MM International Fine Jewelry. All rights reserved. <a href="admin.html" aria-label="Admin Access" style="color: inherit; margin-left: 10px; font-size: 10px; opacity: 0.3; transition: opacity 0.3s;"><i class="fa-solid fa-lock"></i></a></p>
+        <div class="social-links">
+          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="Pinterest"><i class="fa-brands fa-pinterest"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- --- DETAILED VIEW MODAL (WITH ZOOM & CART & WISHLIST) --- -->
+  <div id="product-modal" class="modal-overlay">
+    <div class="modal-wrapper">
+      <button class="modal-close-btn" aria-label="Close modal">&times;</button>
+      <div class="modal-content-grid">
+        <div class="modal-img-container" id="modal-zoom-container" style="position:relative; overflow:hidden;">
+          <img class="modal-img" id="detail-modal-img" src="" alt="" style="width:100%; height:100%; object-fit:cover; display:block;">
+          <div id="zoom-lens" style="position:absolute; width:150px; height:150px; border:2px solid rgba(212,175,55,0.4); border-radius:50%; pointer-events:none; background-repeat:no-repeat; background-size:300% 300%; display:none; transform:translate(-50%, -50%);"></div>
+        </div>
+        <div class="modal-details" style="max-height:85vh; overflow-y:auto; padding:40px 50px;">
+          <span class="modal-category" id="detail-modal-category">RINGS</span>
+          <h3 class="modal-title" id="detail-modal-title">Jewelry Title</h3>
+          <p class="modal-price" id="detail-modal-price">$0.00</p>
+          <div id="detail-modal-stock-status" style="font-size:11px; margin-bottom:10px; font-weight:600;"></div>
+          <p class="modal-desc" id="detail-modal-desc">Detailed descriptions appear here...</p>
+          
+          <!-- Variants -->
+          <div style="margin: 15px 0;" id="detail-variants-box">
+            <div style="margin-bottom:12px;">
+              <span style="font-size:11px; color:var(--color-text-secondary); text-transform:uppercase; letter-spacing:0.1em; display:block; margin-bottom:6px;">Gold type / Metal</span>
+              <div style="display:flex; gap:8px;" id="detail-metal-variants">
+                <button type="button" class="option-btn active" style="padding:6px 12px; font-size:10px;" data-metal="Platinum 950">Platinum</button>
+                <button type="button" class="option-btn" style="padding:6px 12px; font-size:10px;" data-metal="18K Yellow Gold">Yellow Gold</button>
+                <button type="button" class="option-btn" style="padding:6px 12px; font-size:10px;" data-metal="18K White Gold">White Gold</button>
+                <button type="button" class="option-btn" style="padding:6px 12px; font-size:10px;" data-metal="18K Rose Gold">Rose Gold</button>
+              </div>
+            </div>
+            <div style="margin-bottom:12px;" id="detail-size-variant-box">
+              <span style="font-size:11px; color:var(--color-text-secondary); text-transform:uppercase; letter-spacing:0.1em; display:block; margin-bottom:6px;">Size</span>
+              <select id="detail-size-select" class="form-input" style="padding:8px 12px; font-size:12px; width:100px;">
+                <option value="5">US 5</option>
+                <option value="6" selected>US 6</option>
+                <option value="7">US 7</option>
+                <option value="8">US 8</option>
+                <option value="9">US 9</option>
+              </select>
+            </div>
+          </div>
+
+          <ul class="specs-list" id="detail-modal-specs">
+            <!-- Specifications here -->
+          </ul>
+          
+          <div style="margin-top: 15px; display:flex; gap:10px;">
+            <button class="btn btn-primary" id="detail-add-to-cart-btn" style="flex:1;"><i class="fa-solid fa-bag-shopping" style="margin-right:8px;"></i> Add to Cart</button>
+            <button class="btn btn-secondary" id="detail-add-to-wishlist-btn" style="padding:14px 20px;"><i class="fa-solid fa-heart"></i></button>
+          </div>
+
+          <!-- Related products -->
+          <div style="margin-top:25px; border-top:1px solid rgba(255,255,255,0.05); padding-top:20px;">
+            <h4 style="font-size:13px; color:var(--color-gold-light); margin-bottom:12px; text-transform:uppercase; letter-spacing:0.1em;">You May Also Designate</h4>
+            <div id="detail-related-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+              <!-- Dynamically populated related items -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- --- SHOPPING CART DRAWER --- -->
+  <div id="cart-drawer-overlay" class="drawer-overlay">
+    <div class="drawer-container">
+      <div class="drawer-header">
+        <h3 class="drawer-title"><i class="fa-solid fa-bag-shopping"></i> Shopping Bag</h3>
+        <button class="drawer-close" id="cart-drawer-close-btn">&times;</button>
+      </div>
+      <div class="drawer-items" id="cart-drawer-items">
+        <!-- Dynamically rendered cart cards -->
+      </div>
+      <div class="drawer-footer">
+        <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+          <span style="font-size:11px; text-transform:uppercase; letter-spacing:0.1em;">Atelier Subtotal</span>
+          <span style="font-family:var(--font-serif); font-size:24px; color:var(--color-gold-light);" id="cart-subtotal-label">$0.00</span>
+        </div>
+        <button class="btn btn-primary" id="cart-checkout-trigger-btn" style="width:100%;">Authorize Checkout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- --- WISHLIST DRAWER --- -->
+  <div id="wishlist-drawer-overlay" class="drawer-overlay">
+    <div class="drawer-container">
+      <div class="drawer-header">
+        <h3 class="drawer-title"><i class="fa-solid fa-heart"></i> Saved Pieces</h3>
+        <button class="drawer-close" id="wishlist-drawer-close-btn">&times;</button>
+      </div>
+      <div class="drawer-items" id="wishlist-drawer-items">
+        <!-- Dynamically rendered wishlist cards -->
+      </div>
+    </div>
+  </div>
+
+  <!-- --- USER LOGIN/SIGNUP MODAL --- -->
+  <div id="user-auth-modal" class="modal-overlay">
+    <div class="modal-wrapper" style="max-width:440px; padding:40px;">
+      <button class="modal-close-btn" id="auth-modal-close-btn">&times;</button>
+      
+      <!-- Login View -->
+      <div id="auth-login-view">
+        <h3 style="font-size:26px; text-align:center; margin-bottom:5px; color:#fff;">Welcome Back</h3>
+        <p style="text-align:center; font-size:11px; text-transform:uppercase; letter-spacing:0.15em; color:var(--color-gold); margin-bottom:30px;">Atelier Account Access</p>
+        
+        <form id="login-form">
+          <div class="form-group">
+            <label for="login-email">Email Address</label>
+            <input type="email" id="login-email" class="form-input" required>
+          </div>
+          <div class="form-group" style="margin-bottom:25px;">
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" class="form-input" required>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;">Sign In</button>
+          <p style="text-align:center; font-size:12px; margin-top:20px; color:var(--color-text-secondary);">
+            New to the Atelier? <a href="#" id="toggle-to-signup-link" style="color:var(--color-gold);">Create Account</a>
+          </p>
+        </form>
+      </div>
+
+      <!-- Signup View -->
+      <div id="auth-signup-view" style="display:none;">
+        <h3 style="font-size:26px; text-align:center; margin-bottom:5px; color:#fff;">Create Profile</h3>
+        <p style="text-align:center; font-size:11px; text-transform:uppercase; letter-spacing:0.15em; color:var(--color-gold); margin-bottom:30px;">Register MM Account</p>
+        
+        <form id="signup-form">
+          <div class="form-group">
+            <label for="signup-name">Full Name</label>
+            <input type="text" id="signup-name" class="form-input" placeholder="e.g., Alexandra Sterling" required>
+          </div>
+          <div class="form-group">
+            <label for="signup-email">Email Address</label>
+            <input type="email" id="signup-email" class="form-input" required>
+          </div>
+          <div class="form-group" style="margin-bottom:25px;">
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" class="form-input" required>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;">Create Account</button>
+          <p style="text-align:center; font-size:12px; margin-top:20px; color:var(--color-text-secondary);">
+            Already have an account? <a href="#" id="toggle-to-login-link" style="color:var(--color-gold);">Sign In</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- --- SECURE CHECKOUT FLOW MODAL --- -->
+  <div id="checkout-modal" class="modal-overlay">
+    <div class="modal-wrapper checkout-modal-box" style="padding:40px;">
+      <button class="modal-close-btn" id="checkout-modal-close-btn">&times;</button>
+      <h3 style="font-size:28px; text-align:center; margin-bottom:25px; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:12px; color:#fff;">Atelier Authorization</h3>
+      
+      <div class="checkout-grid" id="checkout-form-container">
+        <!-- Billing/shipping Inputs -->
+        <form id="checkout-details-form" style="display:flex; flex-direction:column; gap:15px;">
+          <div>
+            <h4 style="font-size:13px; color:var(--color-gold-light); margin-bottom:10px; text-transform:uppercase;">Shipping Address</h4>
+            <div class="form-group" style="margin-bottom:10px;">
+              <label>Full Name</label>
+              <input type="text" id="checkout-name" class="form-input" style="padding:10px;" required>
+            </div>
+            <div class="form-group" style="margin-bottom:10px;">
+              <label>Street Address</label>
+              <input type="text" id="checkout-address" class="form-input" style="padding:10px;" required>
+            </div>
+            <div class="grid-2col" style="gap:10px;">
+              <div class="form-group" style="margin-bottom:10px;">
+                <label>City</label>
+                <input type="text" id="checkout-city" class="form-input" style="padding:10px;" required>
+              </div>
+              <div class="form-group" style="margin-bottom:10px;">
+                <label>ZIP Code</label>
+                <input type="text" id="checkout-zip" class="form-input" style="padding:10px;" required>
+              </div>
+            </div>
+          </div>
+          
+          <div style="margin-top:10px;">
+            <h4 style="font-size:13px; color:var(--color-gold-light); margin-bottom:10px; text-transform:uppercase;">Secure Payment Info</h4>
+            <div class="form-group" style="margin-bottom:10px;">
+              <label>Credit Card Number</label>
+              <input type="text" id="checkout-card-num" class="form-input" style="padding:10px;" placeholder="•••• •••• •••• ••••" required>
+            </div>
+            <div class="grid-2col" style="gap:10px;">
+              <div class="form-group" style="margin-bottom:10px;">
+                <label>Expiry (MM/YY)</label>
+                <input type="text" id="checkout-card-expiry" class="form-input" style="padding:10px;" placeholder="MM/YY" required>
+              </div>
+              <div class="form-group" style="margin-bottom:10px;">
+                <label>CVC</label>
+                <input type="password" id="checkout-card-cvc" class="form-input" style="padding:10px;" placeholder="•••" required>
+              </div>
+            </div>
+          </div>
+          
+          <button type="submit" class="btn btn-primary" style="margin-top:15px; width:100%;"><i class="fa-solid fa-lock"></i> Authorize Payment</button>
+        </form>
+        
+        <!-- Order Summary panel -->
+        <div style="background:rgba(255,255,255,0.01); border:1px solid var(--color-border); padding:20px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <h4 style="font-size:13px; color:var(--color-gold-light); margin-bottom:15px; text-transform:uppercase; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:8px;">Order Details</h4>
+            <div id="checkout-summary-items" style="max-height:160px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; font-size:12px; color:var(--color-text-secondary);">
+              <!-- Cart details items -->
+            </div>
+          </div>
+          
+          <!-- Promo Discount -->
+          <div style="margin-top:20px;">
+            <div style="display:flex; gap:6px; margin-bottom:15px;">
+              <input type="text" id="checkout-promo-input" class="form-input" style="padding:8px; font-size:11px; flex:1;" placeholder="Coupon Code">
+              <button type="button" id="checkout-promo-apply-btn" class="btn btn-secondary" style="padding:0 12px; font-size:10px;">Apply</button>
+            </div>
+            
+            <div style="border-top:1px solid rgba(255,255,255,0.05); padding-top:12px; display:flex; flex-direction:column; gap:8px; font-size:12px;">
+              <div style="display:flex; justify-content:space-between;">
+                <span style="color:var(--color-text-muted);">Atelier Subtotal</span>
+                <span id="checkout-subtotal-lbl">$0.00</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; display:none;" id="checkout-discount-row">
+                <span style="color:#00cc7a;">Discount Coupon</span>
+                <span id="checkout-discount-lbl" style="color:#00cc7a;">-$0.00</span>
+              </div>
+              <div style="display:flex; justify-content:space-between;">
+                <span style="color:var(--color-text-muted);">Luxury Tax (8%)</span>
+                <span id="checkout-tax-lbl">$0.00</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; border-top:1px solid rgba(255,255,255,0.05); padding-top:10px; font-weight:600; font-size:14px;">
+                <span style="color:var(--color-gold);">Total Invoiced</span>
+                <span id="checkout-total-lbl" style="color:var(--color-gold-light); font-size:16px;">$0.00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Checkout Success View -->
+      <div id="checkout-success-view" style="display:none; text-align:center; padding:30px 0;">
+        <i class="fa-solid fa-circle-check" style="font-size:54px; color:var(--color-gold); display:block; margin-bottom:20px; text-shadow:0 0 15px var(--color-gold-glow);"></i>
+        <h3 style="font-size:26px; margin-bottom:10px;">Order Authorized</h3>
+        <p style="color:var(--color-text-secondary); font-size:14px; max-width:440px; margin:0 auto 25px; line-height:1.6;">
+          Your order has been registered in the MM Atelier. Copy your unique Order ID to track transit progress.
+        </p>
+        <div style="background:rgba(255,255,255,0.02); border:1px solid var(--color-border); padding:20px; text-align:left; max-width:400px; margin:0 auto 30px; font-size:13px;" id="checkout-receipt-details">
+          <!-- Receipt printed here -->
+        </div>
+        <button type="button" class="btn btn-secondary" id="checkout-success-track-btn">Track Shipping Progress</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript file -->
+  <script src="script.js?v=2"></script>
+</body>
+</html>

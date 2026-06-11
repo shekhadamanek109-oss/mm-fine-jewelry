@@ -1,0 +1,93 @@
+[
+  {
+    "id": "log-13-1781162745",
+    "timestamp": "2026-06-11T12:55:45.571542",
+    "action": "catalog_update",
+    "details": "Updated product catalog (7 items)",
+    "user": "admin"
+  },
+  {
+    "id": "log-12-1781162612",
+    "timestamp": "2026-06-11T12:53:32.551986",
+    "action": "tab_visit",
+    "details": "Opened tab: catalog",
+    "user": "admin"
+  },
+  {
+    "id": "log-11-1781159936",
+    "timestamp": "2026-06-11T12:08:56.404916",
+    "action": "tab_visit",
+    "details": "Opened tab: messages",
+    "user": "admin"
+  },
+  {
+    "id": "log-10-1781159800",
+    "timestamp": "2026-06-11T12:06:40.481503",
+    "action": "tab_visit",
+    "details": "Opened tab: audit",
+    "user": "admin"
+  },
+  {
+    "id": "log-9-1781159794",
+    "timestamp": "2026-06-11T12:06:34.501587",
+    "action": "tab_visit",
+    "details": "Opened tab: settings",
+    "user": "admin"
+  },
+  {
+    "id": "log-8-1781159789",
+    "timestamp": "2026-06-11T12:06:29.835793",
+    "action": "tab_visit",
+    "details": "Opened tab: messages",
+    "user": "admin"
+  },
+  {
+    "id": "log-7-1781159784",
+    "timestamp": "2026-06-11T12:06:24.564323",
+    "action": "tab_visit",
+    "details": "Opened tab: customers",
+    "user": "admin"
+  },
+  {
+    "id": "log-6-1781159782",
+    "timestamp": "2026-06-11T12:06:22.397883",
+    "action": "tab_visit",
+    "details": "Opened tab: coupons",
+    "user": "admin"
+  },
+  {
+    "id": "log-5-1781159778",
+    "timestamp": "2026-06-11T12:06:18.730695",
+    "action": "tab_visit",
+    "details": "Opened tab: orders",
+    "user": "admin"
+  },
+  {
+    "id": "log-4-1781159775",
+    "timestamp": "2026-06-11T12:06:15.686293",
+    "action": "tab_visit",
+    "details": "Opened tab: catalog",
+    "user": "admin"
+  },
+  {
+    "id": "log-3-1781159570",
+    "timestamp": "2026-06-11T12:02:50.663602",
+    "action": "order_status_update",
+    "details": "Order MM-533997 status updated to Shipped",
+    "user": "admin"
+  },
+  {
+    "id": "log-2-1781159544",
+    "timestamp": "2026-06-11T12:02:24.320878",
+    "action": "user_signup",
+    "details": "New user signed up: demo@mminternational.com",
+    "user": "admin"
+  },
+  {
+    "id": "log-1-1781159532",
+    "timestamp": "2026-06-11T12:02:12.620127",
+    "action": "order_created",
+    "details": "Order MM-533997 placed by Test Customer ($8,500)",
+    "user": "admin"
+  }
+]

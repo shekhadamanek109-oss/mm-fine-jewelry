@@ -1,0 +1,71 @@
+{
+  "hero": {
+    "subtitle": "Bespoke Excellence Since 1998",
+    "title": "Timeless Luxury, <br><span class=\"text-gold\">Hand-Crafted</span> Brilliance",
+    "desc": "Elevate your stories with our collection of diamonds, emeralds, and fine metals. Designed for those who value absolute distinction and master craftsmanship."
+  },
+  "atelier": {
+    "subtitle": "Heritage & Philosophy",
+    "title": "The Craftsmanship Behind MM Fine Jewelry",
+    "text1": "Every master creation inside the MM Atelier begins its life as a pencil stroke on tracing paper. Our world-renowned lapidaries select only the most outstanding gemstones, sourcing them ethically from locations known for historic purity.",
+    "text2": "Hand-forged by master goldsmiths using traditional heating methods and modern design refinements, each ring, necklace, and bangle holds a presence that transcends fashion cycles. We produce only a small batch of fine jewelry each season, preserving rarity and value.",
+    "feat1_title": "Bespoke Heritage",
+    "feat1_desc": "Tailor jewelry pieces matching your personal history with our specialized private designers.",
+    "feat2_title": "Conflict-Free Gems",
+    "feat2_desc": "Every single gemstone has been certified under strict Kimberly process agreements."
+  },
+  "brand": {
+    "logo_title": "MM JEWELRY",
+    "logo_subtitle": "International",
+    "about_desc": "Redefining luxury since 1998 with hand-selected gemstones, immaculate shapes, and premium platinum and gold bands."
+  },
+  "customizer_pricing": {
+    "metal": {
+      "platinum": 2200,
+      "yellow-gold": 1500,
+      "white-gold": 1600,
+      "rose-gold": 1550
+    },
+    "gem": {
+      "diamond": 5500,
+      "emerald": 4200,
+      "sapphire": 3800,
+      "ruby": 4800
+    },
+    "design": {
+      "solitaire": 1200,
+      "halo": 1800,
+      "threestone": 2500
+    }
+  },
+  "showrooms": [
+    "Paris (Place Vendôme)",
+    "New York (Fifth Avenue)",
+    "Geneva (Rue du Rhône)",
+    "London (Bond Street)"
+  ],
+  "booking_services": [
+    {
+      "id": "bespoke-design",
+      "title": "Bespoke Design",
+      "desc": "Design a custom engagement ring or specialized heirloom with our lead designer."
+    },
+    {
+      "id": "showroom-viewing",
+      "title": "Showroom Viewing",
+      "desc": "A private 45-minute viewing of our current catalog at our luxurious suite."
+    }
+  ],
+  "discount_codes": [
+    {
+      "code": "LUXURY10",
+      "rate": 0.10,
+      "desc": "10% Off Fine Jewelry Catalog"
+    },
+    {
+      "code": "WELCOME500",
+      "rate": 0.05,
+      "desc": "5% Welcome Discount Code"
+    }
+  ]
+}

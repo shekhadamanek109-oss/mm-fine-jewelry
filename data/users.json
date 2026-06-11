@@ -1,0 +1,26 @@
+[
+  {
+    "email": "alexandra@sterling.com",
+    "password": "customer123",
+    "name": "Alexandra Sterling",
+    "role": "customer",
+    "wishlist": [],
+    "orders": []
+  },
+  {
+    "email": "john@doe.com",
+    "password": "password",
+    "name": "John Doe",
+    "role": "customer",
+    "wishlist": [],
+    "orders": []
+  },
+  {
+    "email": "demo@mminternational.com",
+    "password": "demo123",
+    "name": "Demo User",
+    "role": "customer",
+    "wishlist": [],
+    "orders": []
+  }
+]

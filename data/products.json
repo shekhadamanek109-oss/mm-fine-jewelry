@@ -1,0 +1,127 @@
+[
+  {
+    "id": "ring-signature",
+    "category": "rings",
+    "title": "The Signature Solitaire",
+    "price": "$8,500",
+    "img": "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=600",
+    "badge": "Exclusive",
+    "desc": "An iconic symbol of eternal devotion. This signature ring features a brilliant round-cut diamond cradled in an elevated platinum claw setting, designed to catch light from every angle.",
+    "stock": 3,
+    "enabled": true,
+    "specs": {
+      "metal": "Platinum 950",
+      "gemstone": "Round Cut Diamond",
+      "carats": "1.80 ct",
+      "clarity": "VVS1",
+      "color": "D (Colorless)"
+    }
+  },
+  {
+    "id": "necklace-aurora",
+    "category": "necklaces",
+    "title": "Aurora Sapphire Pendant",
+    "price": "$12,400",
+    "img": "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=600",
+    "badge": "Bespoke",
+    "desc": "Deep royal blue velvet color. This sapphire pendant is haloed by brilliant-cut diamonds, suspended elegantly on an 18-karat white gold chain. Crafted to stand the test of time.",
+    "stock": 3,
+    "enabled": true,
+    "specs": {
+      "metal": "18k White Gold",
+      "gemstone": "Oval Ceylon Sapphire",
+      "carats": "2.50 ct (Sapphire)",
+      "clarity": "Eye-Clean",
+      "length": "45 cm"
+    }
+  },
+  {
+    "id": "earrings-emerald",
+    "category": "earrings",
+    "title": "Elysian Emerald Drops",
+    "price": "$9,200",
+    "img": "https://images.unsplash.com/photo-1635767798638-3e25273a8236?auto=format&fit=crop&q=80&w=600",
+    "badge": "New",
+    "desc": "Breathtaking Colombian emerald drop earrings, surrounded by micro-pavé diamonds. These pieces represent the height of luxury, reflecting natural light into deep green reflections.",
+    "stock": 2,
+    "enabled": true,
+    "specs": {
+      "metal": "18k Yellow Gold",
+      "gemstone": "Colombian Emeralds",
+      "carats": "3.10 ct total weight",
+      "clarity": "F1 Minor Treatment",
+      "backing": "Latch Back"
+    }
+  },
+  {
+    "id": "bracelet-eternity",
+    "category": "bracelets",
+    "title": "Eternity Gold Bangle",
+    "price": "$6,800",
+    "img": "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=600",
+    "badge": "Classic",
+    "desc": "A minimalist masterpiece. Sculpted from pure yellow gold with hand-finished high-polish textures, this structured bangle stands as a testament to understated refinement.",
+    "stock": 8,
+    "enabled": true,
+    "specs": {
+      "metal": "18k Yellow Gold",
+      "gemstone": "Micro-diamond Accents",
+      "carats": "0.45 ct",
+      "weight": "28.5 grams",
+      "size": "Medium"
+    }
+  },
+  {
+    "id": "ring-vignette",
+    "category": "rings",
+    "title": "Vignette Halo Ring",
+    "price": "$7,200",
+    "img": "https://images.unsplash.com/photo-1598560917505-59a3ad559071?auto=format&fit=crop&q=80&w=600",
+    "badge": "Popular",
+    "desc": "An exquisite diamond halo ring featuring a central cushion-cut gemstone surrounded by a border of brilliant pavé-set diamonds that extend down the band.",
+    "stock": 5,
+    "enabled": true,
+    "specs": {
+      "metal": "18k Rose Gold",
+      "gemstone": "Cushion Cut Diamond",
+      "carats": "1.20 ct",
+      "clarity": "VS1",
+      "color": "F (GIA)"
+    }
+  },
+  {
+    "id": "necklace-classic",
+    "category": "necklaces",
+    "title": "Classic Gold Collar",
+    "price": "$11,000",
+    "img": "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=600",
+    "badge": "",
+    "desc": "A bold choker-length collar chain composed of hand-woven fluid gold links, draping seamlessly over the collarbone. Ideal for black-tie presentations.",
+    "stock": 0,
+    "enabled": true,
+    "specs": {
+      "metal": "18k Yellow Gold",
+      "gemstone": "None",
+      "carats": "N/A",
+      "weight": "42 grams",
+      "length": "40 cm"
+    }
+  },
+  {
+    "id": "item-1781162646909",
+    "category": "rings",
+    "title": "b",
+    "price": "099009",
+    "img": "nmkdnejkwncjkenhcd",
+    "badge": "",
+    "desc": "\n",
+    "stock": 5,
+    "enabled": true,
+    "specs": {
+      "metal": "",
+      "gemstone": "",
+      "carats": "",
+      "clarity": ""
+    }
+  }
+]

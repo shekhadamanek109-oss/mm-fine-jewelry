@@ -1,0 +1,23 @@
+[
+  {
+    "id": "MM-533997",
+    "timestamp": "2026-06-11T12:02:12.619755",
+    "items": [
+      {
+        "product": {
+          "id": "ring-signature",
+          "title": "The Signature Solitaire"
+        },
+        "quantity": 1
+      }
+    ],
+    "total": "$8,500",
+    "shipping": {
+      "name": "Test Customer",
+      "email": "test@example.com",
+      "address": "123 Gold St"
+    },
+    "status": "Shipped",
+    "discount_applied": ""
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "id": "msg-1-1781159555",
+    "timestamp": "2026-06-11T12:02:35.245070",
+    "name": "Jane Doe",
+    "email": "jane@example.com",
+    "service": "Ring Consultation",
+    "date": "",
+    "time": "",
+    "notes": "Looking for a bespoke engagement ring",
+    "status": "read",
+    "replies": []
+  }
+]

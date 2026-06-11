@@ -1,0 +1,9 @@
+# Node / Build directories
+node_modules/
+.DS_Store
+*.log
+__pycache__/
+*.pyc
+
+# Local data cache
+.gemini/
