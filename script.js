@@ -469,8 +469,6 @@ function openProductModal(id) {
       zoomContainer.style.aspectRatio = 'auto';
       
       const thumbs = zoomContainer.querySelectorAll('.gallery-thumb');
-      const mainImg = zoomContainer.querySelector('#detail-modal-img');
-      const mainVid = zoomContainer.querySelector('#detail-modal-video');
       
       thumbs.forEach(thumb => {
         thumb.addEventListener('click', () => {
@@ -484,16 +482,25 @@ function openProductModal(id) {
           const idx = parseInt(thumb.getAttribute('data-idx'));
           const selectedMedia = allMedia[idx];
           
+          const currentImg = document.getElementById('detail-modal-img');
+          const currentVid = document.getElementById('detail-modal-video');
+          
           if (selectedMedia.type === 'video') {
-            mainImg.style.display = 'none';
-            mainVid.src = selectedMedia.url;
-            mainVid.style.display = 'block';
-            mainVid.play().catch(() => {});
+            if (currentImg) currentImg.style.display = 'none';
+            if (currentVid) {
+              currentVid.src = selectedMedia.url;
+              currentVid.style.display = 'block';
+              currentVid.play().catch(() => {});
+            }
           } else {
-            mainVid.pause();
-            mainVid.style.display = 'none';
-            mainImg.src = selectedMedia.url;
-            mainImg.style.display = 'block';
+            if (currentVid) {
+              currentVid.pause();
+              currentVid.style.display = 'none';
+            }
+            if (currentImg) {
+              currentImg.src = selectedMedia.url;
+              currentImg.style.display = 'block';
+            }
           }
         });
       });
