@@ -117,7 +117,7 @@ class CustomServerHandler(SimpleHTTPRequestHandler):
 
     def do_POST(self):
         path = self.path
-        body = self._read_body()
+        body = None if path == '/api/upload-image' else self._read_body()
 
         # --- API: SAVE PRODUCTS ---
         if path == '/api/save-products':
@@ -147,7 +147,10 @@ class CustomServerHandler(SimpleHTTPRequestHandler):
                     self.send_json(400, {"success": False, "error": "Requires multipart/form-data"})
                     return
 
-                boundary = content_type.split("boundary=")[1].encode()
+                if 'boundary=' not in content_type:
+                    self.send_json(400, {"success": False, "error": "Missing boundary in Content-Type"})
+                    return
+                boundary = content_type.split("boundary=")[1].strip().strip('"').encode()
                 raw = self._read_body_raw()
                 filename, file_bytes = self._parse_multipart(raw, boundary)
 
@@ -389,7 +392,17 @@ class CustomServerHandler(SimpleHTTPRequestHandler):
                 if len(header_body) < 2:
                     continue
                 header, body = header_body
-                body = body.rstrip(b'\r\n--')
+                
+                # Safe strip of trailing boundary/newlines without corrupting file bytes
+                if body.endswith(b'\r\n--\r\n'):
+                    body = body[:-6]
+                elif body.endswith(b'\r\n--'):
+                    body = body[:-4]
+                elif body.endswith(b'\r\n'):
+                    body = body[:-2]
+                elif body.endswith(b'\n'):
+                    body = body[:-1]
+                
                 header_str = header.decode('utf-8', errors='ignore')
                 for line in header_str.split('\r\n'):
                     if 'filename=' in line:
