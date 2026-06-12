@@ -97,21 +97,22 @@ class CustomServerHandler(SimpleHTTPRequestHandler):
             self.send_json(200, users)
             return
 
-        # Cloud persistent disk routing for assets and data
-        if os.path.exists('/data'):
-            if path == '/data/products.json':
-                self.serve_file('/data/products.json', 'application/json')
+        # Serve products.json and config.json from writable data directory (persistent or local)
+        if path == '/data/products.json':
+            self.serve_file(os.path.join(get_data_dir(), 'products.json'), 'application/json')
+            return
+        elif path == '/data/config.json':
+            self.serve_file(os.path.join(get_data_dir(), 'config.json'), 'application/json')
+            return
+
+        # Serve assets from the writable data directory if they exist there
+        if path.startswith('/assets/'):
+            filename = path.split('/assets/')[1]
+            target = os.path.join(get_data_dir(), 'assets', filename)
+            if os.path.exists(target):
+                ctype = self._guess_image_type(target)
+                self.serve_file(target, ctype)
                 return
-            elif path == '/data/config.json':
-                self.serve_file('/data/config.json', 'application/json')
-                return
-            elif path.startswith('/assets/'):
-                filename = path.split('/assets/')[1]
-                target = os.path.join('/data/assets', filename)
-                if os.path.exists(target):
-                    ctype = self._guess_image_type(target)
-                    self.serve_file(target, ctype)
-                    return
 
         super().do_GET()
 
