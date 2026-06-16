@@ -471,7 +471,7 @@ if __name__ == '__main__':
             shutil.copy(hero_src, hero_dst)
 
     httpd = HTTPServer(('', PORT), CustomServerHandler)
-    print(f"✦ MM Fine Jewelry Server running at http://localhost:{PORT}")
+    print(f"✦ MM Jewels Server running at http://localhost:{PORT}")
     print(f"  Admin Console: http://localhost:{PORT}/admin.html")
     try:
         httpd.serve_forever()

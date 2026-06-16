@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin.html
 Disallow: /api/
 
-Sitemap: https://mm-fine-jewelry.onrender.com/sitemap.xml
+Sitemap: https://mm-jewels.onrender.com/sitemap.xml

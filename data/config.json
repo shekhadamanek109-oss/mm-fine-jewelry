@@ -6,8 +6,8 @@
   },
   "atelier": {
     "subtitle": "Heritage & Philosophy",
-    "title": "The Craftsmanship Behind MM Fine Jewelry",
-    "text1": "Every master creation inside the MM Atelier begins its life as a pencil stroke on tracing paper. Our world-renowned lapidaries select only the most outstanding gemstones, sourcing them ethically from locations known for historic purity.",
+    "title": "The Craftsmanship Behind MM Jewels",
+    "text1": "Every master creation inside the MM Jewels Atelier begins its life as a pencil stroke on tracing paper. Our world-renowned lapidaries select only the most outstanding gemstones, sourcing them ethically from locations known for historic purity.",
     "text2": "Hand-forged by master goldsmiths using traditional heating methods and modern design refinements, each ring, necklace, and bangle holds a presence that transcends fashion cycles. We produce only a small batch of fine jewelry each season, preserving rarity and value.",
     "feat1_title": "Bespoke Heritage",
     "feat1_desc": "Tailor jewelry pieces matching your personal history with our specialized private designers.",
@@ -15,8 +15,8 @@
     "feat2_desc": "Every single gemstone has been certified under strict Kimberly process agreements."
   },
   "brand": {
-    "logo_title": "MM JEWELRY",
-    "logo_subtitle": "International",
+    "logo_title": "MM JEWELLS",
+    "logo_subtitle": "JEWELS",
     "about_desc": "Redefining luxury since 1998 with hand-selected gemstones, immaculate shapes, and premium platinum and gold bands."
   },
   "customizer_pricing": {
@@ -60,7 +60,7 @@
     {
       "code": "LUXURY10",
       "rate": 0.10,
-      "desc": "10% Off Fine Jewelry Catalog"
+      "desc": "10% Off MM Jewels Catalog"
     },
     {
       "code": "WELCOME500",
