@@ -76,7 +76,10 @@ async function initApp() {
     initTestimonials,
     initAIGenerator,
     initProductZoom,
-    initScrollReveals
+    initScrollReveals,
+    populateFooterShowrooms,
+    initBlogPage,
+    initLocalReviews
   ];
 
   for (const fn of inits) {
@@ -1368,5 +1371,218 @@ function initScrollReveals() {
   window.addEventListener('scroll', checkReveal);
   // Run once initially to catch elements already in viewport
   setTimeout(checkReveal, 200);
+}
+
+// --- SEO DYNAMIC FUNCTIONS ---
+
+function populateFooterShowrooms() {
+  const list = document.getElementById('footer-showrooms-list');
+  if (!list) return;
+  list.innerHTML = '';
+  const showrooms = state.config.showrooms || ["Paris (Place Vendôme)", "New York (Fifth Avenue)", "Geneva (Rue du Rhône)", "London (Bond Street)"];
+  showrooms.forEach(s => {
+    const li = document.createElement('li');
+    const cityName = s.split(' (')[0].trim();
+    const slug = cityName.toLowerCase().replace(' ', '-');
+    li.innerHTML = `<a href="showrooms.html#${slug}">${s}</a>`;
+    list.appendChild(li);
+  });
+}
+
+function initBlogPage() {
+  const filterBtns = document.querySelectorAll('.blog-filter-btn');
+  const cards = document.querySelectorAll('.blog-card');
+  const readPanels = document.querySelectorAll('.blog-read-panel');
+  const backBtns = document.querySelectorAll('.btn-back-journal');
+  
+  const blogHeader = document.getElementById('blog-hero-header');
+  const blogFilters = document.getElementById('blog-filters-bar');
+  const blogGrid = document.getElementById('blog-cards-grid');
+  
+  if (cards.length === 0) return; // Not on blog page
+  
+  // Filter click
+  filterBtns.forEach(btn => {
+    btn.onclick = () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const tag = btn.getAttribute('data-tag');
+      
+      cards.forEach(card => {
+        if (tag === 'all' || card.getAttribute('data-tag') === tag) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    };
+  });
+  
+  // Read panel open
+  cards.forEach(card => {
+    card.onclick = () => {
+      const id = card.getAttribute('data-id');
+      const targetPanel = document.getElementById(`post-${id}`);
+      if (!targetPanel) return;
+      
+      // Hide list UI
+      if (blogHeader) blogHeader.style.display = 'none';
+      if (blogFilters) blogFilters.style.display = 'none';
+      if (blogGrid) blogGrid.style.display = 'none';
+      
+      // Show panel
+      readPanels.forEach(p => p.style.display = 'none');
+      targetPanel.style.display = 'block';
+      
+      // Update URL hash without reload
+      history.pushState(null, null, `#${id}`);
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+  });
+  
+  // Back to list
+  backBtns.forEach(btn => {
+    btn.onclick = () => {
+      readPanels.forEach(p => p.style.display = 'none');
+      
+      if (blogHeader) blogHeader.style.display = 'block';
+      if (blogFilters) blogFilters.style.display = 'flex';
+      if (blogGrid) blogGrid.style.display = 'grid';
+      
+      // Reset URL hash
+      history.pushState(null, null, 'blog.html');
+    };
+  });
+  
+  // Check initial hash deep link
+  const hash = window.location.hash.substring(1);
+  if (hash) {
+    const matchCard = document.querySelector(`.blog-card[data-id="${hash}"]`);
+    if (matchCard) {
+      setTimeout(() => matchCard.click(), 100);
+    }
+  }
+}
+
+const DEFAULT_LOCAL_REVIEWS = {
+  'paris': [
+    { stars: 5, author: "Genevieve Dubois", date: "June 2026", text: "The Place Vendôme atelier is pure class. Private viewings are intimate, and the custom solitaire is stunning." },
+    { stars: 5, author: "François Laurent", date: "April 2026", text: "Excellent craftsmanship. Visited to choose an engagement ring; the team provided brilliant advice." }
+  ],
+  'new-york': [
+    { stars: 5, author: "Michael Vance", date: "May 2026", text: "Amazing customized ring studio. I ordered a white-gold solitaire setting and the diamond is flawless." },
+    { stars: 5, author: "Sarah Jenkins", date: "May 2026", text: "Luxury jewelry store on Fifth Avenue is unmatched. Outstanding concierge care." }
+  ],
+  'geneva': [
+    { stars: 5, author: "Beat Keller", date: "March 2026", text: "True Swiss-precision jewelry. The handmade bracelets display phenomenal care and metal finish." }
+  ],
+  'london': [
+    { stars: 5, author: "Charlotte Spencer", date: "January 2026", text: "Stunning bridal sets. Sourced our diamond wedding bands here, and we could not be happier." }
+  ]
+};
+
+function initLocalReviews() {
+  const reviewForms = document.querySelectorAll('.local-review-form');
+  if (reviewForms.length === 0 && !document.querySelector('.local-reviews-list')) return; // Not on showrooms page
+  
+  // Star rating buttons handler
+  const ratingSelectors = document.querySelectorAll('.rating-select');
+  ratingSelectors.forEach(selector => {
+    const starBtns = selector.querySelectorAll('.star-input-btn');
+    starBtns.forEach(btn => {
+      btn.onclick = (e) => {
+        e.preventDefault();
+        const rating = parseInt(btn.getAttribute('data-val'));
+        starBtns.forEach((b, idx) => {
+          if (idx < rating) {
+            b.classList.add('active');
+          } else {
+            b.classList.remove('active');
+          }
+        });
+        selector.setAttribute('data-rating', rating);
+      };
+    });
+  });
+  
+  const loadAndRenderReviews = () => {
+    let saved = localStorage.getItem('mm_local_reviews');
+    let reviews = saved ? JSON.parse(saved) : DEFAULT_LOCAL_REVIEWS;
+    
+    document.querySelectorAll('.local-reviews-list').forEach(list => {
+      const city = list.getAttribute('data-city');
+      const cityReviews = reviews[city] || [];
+      list.innerHTML = '';
+      
+      if (cityReviews.length === 0) {
+        list.innerHTML = '<p style="font-size:12px; color:var(--color-text-muted);">No reviews yet. Be the first to leave one!</p>';
+        return;
+      }
+      
+      cityReviews.forEach(r => {
+        const card = document.createElement('div');
+        card.className = 'local-review-card';
+        
+        let starsHTML = '';
+        for (let i = 0; i < 5; i++) {
+          starsHTML += `<i class="fa-solid fa-star" style="color:${i < r.stars ? 'var(--color-gold)' : 'var(--color-text-muted)'};"></i>`;
+        }
+        
+        card.innerHTML = `
+          <div class="review-stars">${starsHTML}</div>
+          <p class="review-text">"${r.text}"</p>
+          <div class="review-author">
+            <span>${r.author}</span>
+            <span class="review-date">${r.date}</span>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    });
+  };
+  
+  // Bind form submissions
+  reviewForms.forEach(form => {
+    form.onsubmit = (e) => {
+      e.preventDefault();
+      const city = form.getAttribute('data-city');
+      const ratingSelector = form.querySelector('.rating-select');
+      const stars = ratingSelector ? parseInt(ratingSelector.getAttribute('data-rating') || '5') : 5;
+      const author = form.querySelector('.review-author-input').value.trim() || 'Anonymous Client';
+      const text = form.querySelector('.review-text-input').value.trim();
+      
+      if (!text) {
+        alert('Please write a comment for your review.');
+        return;
+      }
+      
+      let saved = localStorage.getItem('mm_local_reviews');
+      let reviews = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_LOCAL_REVIEWS));
+      
+      if (!reviews[city]) reviews[city] = [];
+      
+      const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      const today = new Date();
+      const dateString = `${months[today.getMonth()]} ${today.getFullYear()}`;
+      
+      reviews[city].unshift({ stars, author, date: dateString, text });
+      localStorage.setItem('mm_local_reviews', JSON.stringify(reviews));
+      
+      toastNotification('Review submitted! Thank you.');
+      form.reset();
+      
+      // Reset stars visual to 5
+      if (ratingSelector) {
+        ratingSelector.setAttribute('data-rating', '5');
+        ratingSelector.querySelectorAll('.star-input-btn').forEach(b => b.classList.add('active'));
+      }
+      
+      loadAndRenderReviews();
+    };
+  });
+  
+  // Initial load
+  loadAndRenderReviews();
 }
 
