@@ -79,7 +79,10 @@ async function initApp() {
     initScrollReveals,
     populateFooterShowrooms,
     initBlogPage,
-    initLocalReviews
+    initLocalReviews,
+    initNewArrivalsCarousel,
+    initSearchFilter,
+    initCategoryGridLinks
   ];
 
   for (const fn of inits) {
@@ -194,8 +197,13 @@ function createProductCard(p) {
   card.className = 'jewelry-card reveal revealed';
   card.setAttribute('data-id', p.id);
   
-  const isWishlisted = state.wishlist.some(item => item.id === p.id);
   const isOutOfStock = p.stock === 0;
+  
+  const ratingVal = p.id.charCodeAt(0) % 2 === 0 ? 5 : 4;
+  let starsHTML = '';
+  for (let i = 0; i < 5; i++) {
+    starsHTML += `<i class="fa-solid fa-star" style="color:${i < ratingVal ? 'var(--color-gold)' : 'var(--color-text-muted)'}; margin: 0 1px;"></i>`;
+  }
 
   card.innerHTML = `
     ${p.badge ? `<span class="card-badge">${p.badge}</span>` : ''}
@@ -207,6 +215,7 @@ function createProductCard(p) {
       </div>
     </div>
     <div class="card-info">
+      <div class="product-stars">${starsHTML}</div>
       <span class="card-category">${p.category.slice(0, -1)}</span>
       <h3 class="card-title">${p.title}</h3>
       <p class="card-price">${p.price}</p>
@@ -574,8 +583,8 @@ function openProductModal(id) {
   
   // Wishlist visual indicator status check
   const isSaved = state.wishlist.some(item => item.id === p.id);
-  addWishlistBtn.style.color = isSaved ? 'var(--color-gold)' : '#fff';
-  addWishlistBtn.style.borderColor = isSaved ? 'var(--color-gold)' : 'rgba(255,255,255,0.15)';
+  addWishlistBtn.style.color = isSaved ? 'var(--color-gold)' : 'var(--color-text-primary)';
+  addWishlistBtn.style.borderColor = isSaved ? 'var(--color-gold)' : 'var(--color-border)';
   
   addToCartBtn.onclick = () => {
     const sizeSelect = document.getElementById('detail-size-select');
@@ -589,8 +598,8 @@ function openProductModal(id) {
   addWishlistBtn.onclick = () => {
     toggleProductWishlist(p);
     const updatedSave = state.wishlist.some(item => item.id === p.id);
-    addWishlistBtn.style.color = updatedSave ? 'var(--color-gold)' : '#fff';
-    addWishlistBtn.style.borderColor = updatedSave ? 'var(--color-gold)' : 'rgba(255,255,255,0.15)';
+    addWishlistBtn.style.color = updatedSave ? 'var(--color-gold)' : 'var(--color-text-primary)';
+    addWishlistBtn.style.borderColor = updatedSave ? 'var(--color-gold)' : 'var(--color-border)';
   };
   
   // Related catalog products logic
@@ -599,11 +608,11 @@ function openProductModal(id) {
   const related = state.products.filter(item => item.id !== p.id && item.category === p.category).slice(0, 2);
   related.forEach(item => {
     const div = document.createElement('div');
-    div.style.cssText = 'display:flex; gap:10px; background:rgba(255,255,255,0.02); border:1px solid rgba(212,175,55,0.1); padding:8px; cursor:pointer;';
+    div.style.cssText = 'display:flex; gap:10px; background:var(--color-bg-beige); border:1px solid var(--color-border); padding:8px; cursor:pointer; border-radius:var(--border-radius-sm);';
     div.innerHTML = `
       <img src="${item.img}" style="width:40px; height:45px; object-fit:cover;">
       <div style="flex-grow:1; display:flex; flex-direction:column; justify-content:center;">
-        <h5 style="font-size:11px; margin:0; color:#fff;">${item.title}</h5>
+        <h5 style="font-size:11px; margin:0; color:var(--color-text-primary);">${item.title}</h5>
         <span style="font-size:10px; color:var(--color-gold); margin-top:2px;">${item.price}</span>
       </div>
     `;
@@ -778,13 +787,29 @@ function initBookingFlow() {
 }
 
 function initModals() {
-  const modal = document.getElementById('product-modal');
-  if (!modal) return;
-  const close = modal.querySelector('.modal-close-btn');
-  close.addEventListener('click', () => modal.classList.remove('active'));
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) modal.classList.remove('active');
+  // Global modal close via delegation
+  document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('modal-close-btn') || e.target.closest('.modal-close-btn')) {
+      const activeOverlay = e.target.closest('.modal-overlay') || e.target.closest('.drawer-overlay');
+      if (activeOverlay) activeOverlay.classList.remove('active');
+    }
   });
+
+  // Close modals on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const activeModals = document.querySelectorAll('.modal-overlay.active, .drawer-overlay.active');
+      activeModals.forEach(m => m.classList.remove('active'));
+    }
+  });
+
+  // Product modal overlay click close
+  const modal = document.getElementById('product-modal');
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.classList.remove('active');
+    });
+  }
 }
 
 // --- USER AUTH SYSTEM ---
@@ -1584,5 +1609,158 @@ function initLocalReviews() {
   
   // Initial load
   loadAndRenderReviews();
+}
+
+// --- NEW ARRIVALS CAROUSEL ---
+function initNewArrivalsCarousel() {
+  const track = document.getElementById('carousel-arrivals-track');
+  const prevBtn = document.getElementById('carousel-prev-btn');
+  const nextBtn = document.getElementById('carousel-next-btn');
+  if (!track) return;
+
+  track.innerHTML = '';
+  // Load products to display in the carousel
+  const arrivals = state.products.filter(p => p.enabled !== false && p.img && p.img.startsWith('http'));
+  arrivals.forEach(p => {
+    const card = createProductCard(p);
+    track.appendChild(card);
+  });
+
+  let currentOffset = 0;
+  const cardWidth = 330; // 300px card width + 30px gap
+
+  const updateSlider = () => {
+    const containerWidth = track.parentElement.offsetWidth;
+    const totalWidth = track.scrollWidth;
+    const maxOffset = Math.max(0, totalWidth - containerWidth);
+    if (currentOffset > maxOffset) currentOffset = maxOffset;
+    if (currentOffset < 0) currentOffset = 0;
+    track.style.transform = `translateX(-${currentOffset}px)`;
+
+    if (prevBtn) prevBtn.style.opacity = currentOffset <= 0 ? '0.3' : '1';
+    if (nextBtn) nextBtn.style.opacity = currentOffset >= maxOffset ? '0.3' : '1';
+  };
+
+  if (prevBtn) {
+    prevBtn.onclick = (e) => {
+      e.preventDefault();
+      currentOffset -= cardWidth;
+      if (currentOffset < 0) currentOffset = 0;
+      updateSlider();
+    };
+  }
+
+  if (nextBtn) {
+    nextBtn.onclick = (e) => {
+      e.preventDefault();
+      const containerWidth = track.parentElement.offsetWidth;
+      const totalWidth = track.scrollWidth;
+      const maxOffset = Math.max(0, totalWidth - containerWidth);
+      currentOffset += cardWidth;
+      if (currentOffset > maxOffset) currentOffset = maxOffset;
+      updateSlider();
+    };
+  }
+
+  setTimeout(updateSlider, 200);
+  window.addEventListener('resize', updateSlider);
+}
+
+// --- SEARCH FILTER FOR COLLECTIONS ---
+function initSearchFilter() {
+  const searchInput = document.getElementById('navbar-search');
+  if (!searchInput) return;
+
+  searchInput.addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase().trim();
+    const grid = document.getElementById('collections-grid');
+    if (!grid) return;
+
+    // Reset categories to "all" if there is an active search query
+    if (query !== '') {
+      const tabs = document.querySelectorAll('.filter-btn');
+      tabs.forEach(t => {
+        if (t.getAttribute('data-filter') === 'all') {
+          t.classList.add('active');
+        } else {
+          t.classList.remove('active');
+        }
+      });
+    }
+
+    const cards = grid.querySelectorAll('.jewelry-card');
+    cards.forEach(card => {
+      const pId = card.getAttribute('data-id');
+      const p = state.products.find(item => item.id === pId);
+      if (p) {
+        const title = p.title.toLowerCase();
+        const desc = (p.desc || '').toLowerCase();
+        const category = p.category.toLowerCase();
+        if (title.includes(query) || desc.includes(query) || category.includes(query)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      }
+    });
+  });
+}
+
+// --- CATEGORY GRID NAVIGATION LINKS ---
+function initCategoryGridLinks() {
+  const categoryCards = document.querySelectorAll('.category-card');
+  categoryCards.forEach(card => {
+    card.addEventListener('click', (e) => {
+      const category = card.getAttribute('data-category');
+      
+      if (category === 'wedding') {
+        e.preventDefault();
+        // Go to all and search for wedding
+        const allTab = document.querySelector('.filter-btn[data-filter="all"]');
+        if (allTab) {
+          const tabs = document.querySelectorAll('.filter-btn');
+          tabs.forEach(t => t.classList.remove('active'));
+          allTab.classList.add('active');
+        }
+        
+        renderCatalog('all');
+        
+        const dest = document.getElementById('collections');
+        if (dest) {
+          dest.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        setTimeout(() => {
+          const searchInput = document.getElementById('navbar-search');
+          if (searchInput) {
+            searchInput.value = 'wedding';
+            searchInput.dispatchEvent(new Event('input'));
+          }
+        }, 300);
+      } else {
+        // Find normal tab
+        const tab = document.querySelector(`.filter-btn[data-filter="${category}"]`);
+        if (tab) {
+          e.preventDefault();
+          
+          const tabs = document.querySelectorAll('.filter-btn');
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          
+          renderCatalog(category);
+          
+          const dest = document.getElementById('collections');
+          if (dest) {
+            dest.scrollIntoView({ behavior: 'smooth' });
+          }
+          
+          const searchInput = document.getElementById('navbar-search');
+          if (searchInput) {
+            searchInput.value = '';
+          }
+        }
+      }
+    });
+  });
 }
 

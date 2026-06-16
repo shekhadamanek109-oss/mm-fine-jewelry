@@ -69,7 +69,7 @@
 <body>
 
   <!-- --- HEADER / NAV --- -->
-  <header id="header">
+  <header id="header" class="scrolled">
     <div class="container nav-container">
       <a href="#" class="logo" id="nav-logo-txt">
         MM JEWELRY
@@ -89,19 +89,25 @@
       </nav>
       
       <div class="header-actions">
+        <!-- Search bar inside navbar -->
+        <div class="search-container">
+          <i class="fa-solid fa-magnifying-glass search-icon-inside"></i>
+          <input type="text" id="navbar-search" class="navbar-search-input" placeholder="Search collection...">
+        </div>
+        
         <!-- Wishlist -->
-        <button class="btn-icon" id="header-wishlist-btn" aria-label="Wishlist" style="background:none;border:none;color:#fff;cursor:pointer;position:relative;margin-right:8px;outline:none;">
+        <button class="btn-icon" id="header-wishlist-btn" aria-label="Wishlist" style="background:none;border:none;color:var(--color-text-primary);cursor:pointer;position:relative;margin-right:8px;outline:none;">
           <i class="fa-solid fa-heart" style="font-size:18px;"></i>
           <span id="wishlist-badge" style="position:absolute;top:-8px;right:-8px;background:var(--color-gold);color:#000;font-size:9px;font-weight:700;border-radius:50%;width:16px;height:16px;display:none;align-items:center;justify-content:center;">0</span>
         </button>
         <!-- Shopping Cart -->
-        <button class="btn-icon" id="header-cart-btn" aria-label="Shopping Cart" style="background:none;border:none;color:#fff;cursor:pointer;position:relative;margin-right:8px;outline:none;">
+        <button class="btn-icon" id="header-cart-btn" aria-label="Shopping Cart" style="background:none;border:none;color:var(--color-text-primary);cursor:pointer;position:relative;margin-right:8px;outline:none;">
           <i class="fa-solid fa-bag-shopping" style="font-size:18px;"></i>
           <span id="cart-badge" style="position:absolute;top:-8px;right:-8px;background:var(--color-gold);color:#000;font-size:9px;font-weight:700;border-radius:50%;width:16px;height:16px;display:none;align-items:center;justify-content:center;">0</span>
         </button>
         <!-- User Profile Login -->
         <div id="user-header-portal" style="display:inline-block;margin-right:8px;vertical-align:middle;">
-          <button class="btn-icon" id="header-login-btn" aria-label="User Account" style="background:none;border:none;color:#fff;cursor:pointer;outline:none;">
+          <button class="btn-icon" id="header-login-btn" aria-label="User Account" style="background:none;border:none;color:var(--color-text-primary);cursor:pointer;outline:none;">
             <i class="fa-solid fa-user" style="font-size:18px;"></i>
           </button>
         </div>
@@ -121,12 +127,64 @@
     <div class="container">
       <div class="hero-content">
         <p class="hero-subtitle" id="hero-subtitle-txt">Bespoke Luxury Jewelry Store Since 1998</p>
-        <h1 class="hero-title" id="hero-title-txt">Timeless Luxury, <br><span class="text-gold">Handmade Jewelry</span> Collection</h1>
+        <h1 class="hero-title" id="hero-title-txt">Timeless Elegance</h1>
         <p class="hero-desc" id="hero-desc-txt">Explore MM Fine Jewelry for beautiful diamond jewelry, gold jewelry online, silver jewelry collection, and bespoke wedding jewelry sets crafted for timeless elegance.</p>
         <div class="hero-actions">
-          <a href="#collections" class="btn btn-primary">The Collections</a>
+          <a href="#collections" class="btn btn-primary">Shop Collection</a>
           <a href="#customizer" class="btn btn-secondary">Design Custom</a>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- --- CATEGORY GRID SECTION --- -->
+  <section class="category-section reveal" id="categories-hub">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-subtitle">Explore by Category</p>
+        <h2 class="section-title">Curated Offerings</h2>
+      </div>
+      <div class="category-grid">
+        <!-- Rings -->
+        <a href="#collections" class="category-card" data-category="rings">
+          <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=400" alt="Luxury Rings Collection">
+          <div class="category-card-overlay">
+            <h4 class="category-card-title">Rings</h4>
+            <span class="category-card-count">Shop Selection</span>
+          </div>
+        </a>
+        <!-- Necklaces -->
+        <a href="#collections" class="category-card" data-category="necklaces">
+          <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=400" alt="Luxury Necklaces Collection">
+          <div class="category-card-overlay">
+            <h4 class="category-card-title">Necklaces</h4>
+            <span class="category-card-count">Shop Selection</span>
+          </div>
+        </a>
+        <!-- Earrings -->
+        <a href="#collections" class="category-card" data-category="earrings">
+          <img src="https://images.unsplash.com/photo-1635767798638-3e25273a8236?auto=format&fit=crop&q=80&w=400" alt="Luxury Earrings Collection">
+          <div class="category-card-overlay">
+            <h4 class="category-card-title">Earrings</h4>
+            <span class="category-card-count">Shop Selection</span>
+          </div>
+        </a>
+        <!-- Bracelets -->
+        <a href="#collections" class="category-card" data-category="bracelets">
+          <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=400" alt="Luxury Bracelets Collection">
+          <div class="category-card-overlay">
+            <h4 class="category-card-title">Bracelets</h4>
+            <span class="category-card-count">Shop Selection</span>
+          </div>
+        </a>
+        <!-- Wedding Collection -->
+        <a href="#collections" class="category-card" data-category="wedding">
+          <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=400" alt="Wedding Collection Sets">
+          <div class="category-card-overlay">
+            <h4 class="category-card-title">Wedding Collection</h4>
+            <span class="category-card-count">Shop Selection</span>
+          </div>
+        </a>
       </div>
     </div>
   </section>
@@ -156,7 +214,7 @@
   </section>
 
   <!-- --- BEST-SELLING PRODUCTS --- -->
-  <section id="bestsellers" class="reveal" style="background: #020202; border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+  <section id="bestsellers" class="reveal" style="background: var(--color-bg-deep); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
     <div class="container">
       <div class="section-header">
         <p class="section-subtitle">Most Coveted Diamond Jewelry</p>
@@ -164,6 +222,25 @@
       </div>
       <div id="bestsellers-grid" class="items-grid">
         <!-- JS inserts cards here dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- --- NEW ARRIVALS CAROUSEL SECTION --- -->
+  <section id="new-arrivals" class="reveal" style="background: var(--color-bg-beige); border-bottom: 1px solid var(--color-border);">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-subtitle">Fresh Creations</p>
+        <h2 class="section-title">New Arrivals</h2>
+      </div>
+      <div class="carousel-container">
+        <button class="carousel-nav-btn prev" id="carousel-prev-btn" aria-label="Previous Slide"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="carousel-track-wrapper">
+          <div class="carousel-track" id="carousel-arrivals-track">
+            <!-- JS populates cards here dynamically -->
+          </div>
+        </div>
+        <button class="carousel-nav-btn next" id="carousel-next-btn" aria-label="Next Slide"><i class="fa-solid fa-chevron-right"></i></button>
       </div>
     </div>
   </section>
@@ -275,8 +352,22 @@
     </div>
   </section>
 
+  <!-- --- PROMOTIONAL BANNER SECTION --- -->
+  <section class="promo-banner reveal" id="seasonal-promo">
+    <div class="container">
+      <div class="promo-banner-content">
+        <p class="promo-banner-subtitle">Exclusively Yours</p>
+        <h2 class="promo-banner-title">The Bridal & Engagement Exhibition</h2>
+        <p class="promo-banner-desc">
+          For a limited season, explore rare diamond shapes, custom gold settings, and personalized engraving options. Book an atelier viewing to receive expert guidance from our jewelry curators.
+        </p>
+        <a href="#booking" class="btn btn-primary">Reserve Private Viewing</a>
+      </div>
+    </div>
+  </section>
+
   <!-- --- AI DESIGN & TRY-ON VAULT --- -->
-  <section id="ai-vault" class="reveal" style="background: radial-gradient(circle at center, #0e0e0e 0%, #050505 100%); border-bottom: 1px solid var(--color-border); padding: 100px 0;">
+  <section id="ai-vault" class="reveal" style="background: var(--color-bg-beige); border-bottom: 1px solid var(--color-border); padding: 100px 0;">
     <div class="container">
       <div class="customizer-grid">
         <div>
@@ -338,7 +429,7 @@
   </section>
 
   <!-- --- TESTIMONIALS SECTION --- -->
-  <section id="testimonials" class="reveal" style="background:#050505; border-top:1px solid var(--color-border); padding: 100px 0;">
+  <section id="testimonials" class="reveal" style="background: var(--color-bg-beige); border-top: 1px solid var(--color-border); padding: 100px 0;">
     <div class="container" style="text-align: center;">
       <p class="section-subtitle">Client Stories</p>
       <h2 class="section-title">Atelier Testimonials</h2>
@@ -351,7 +442,7 @@
             <i class="fa-solid fa-star"></i>
             <i class="fa-solid fa-star"></i>
           </div>
-          <p style="font-family: var(--font-serif); font-size:22px; font-style:italic; line-height:1.6; color:var(--color-gold-light); margin-bottom:25px;" id="testimonial-text">
+          <p style="font-family: var(--font-serif); font-size:22px; font-style:italic; line-height:1.6; color:var(--color-text-primary); margin-bottom:25px;" id="testimonial-text">
             "The Signature Solitaire is absolute perfection. The sparkle from the platinum setting exceeds all of my expectations. Exceptional service."
           </p>
           <h4 style="font-family: var(--font-sans); font-size:12px; font-weight:600; letter-spacing:0.2em; text-transform:uppercase;" id="testimonial-author">
@@ -360,15 +451,41 @@
         </div>
         <!-- Slide controls -->
         <div style="display:flex; justify-content:center; gap:15px; padding-bottom:30px;">
-          <button type="button" id="prev-testi-btn" style="background:none; border:1px solid var(--color-border); color:#fff; width:36px; height:36px; cursor:pointer;"><i class="fa-solid fa-chevron-left"></i></button>
-          <button type="button" id="next-testi-btn" style="background:none; border:1px solid var(--color-border); color:#fff; width:36px; height:36px; cursor:pointer;"><i class="fa-solid fa-chevron-right"></i></button>
+          <button type="button" id="prev-testi-btn" style="background:none; border:1px solid var(--color-border); color:var(--color-text-primary); width:36px; height:36px; cursor:pointer;"><i class="fa-solid fa-chevron-left"></i></button>
+          <button type="button" id="next-testi-btn" style="background:none; border:1px solid var(--color-border); color:var(--color-text-primary); width:36px; height:36px; cursor:pointer;"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- --- INSTAGRAM GALLERY SECTION --- -->
+  <section class="instagram-section reveal" id="instagram-vault">
+    <div class="container">
+      <p class="section-subtitle">Social Inspiration</p>
+      <h2 class="section-title">Follow the Atelier @MMFineJewelry</h2>
+      <div class="instagram-grid">
+        <div class="instagram-item">
+          <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=400" alt="Instagram curation 1">
+          <div class="instagram-overlay"><i class="fa-brands fa-instagram"></i></div>
+        </div>
+        <div class="instagram-item">
+          <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=400" alt="Instagram curation 2">
+          <div class="instagram-overlay"><i class="fa-brands fa-instagram"></i></div>
+        </div>
+        <div class="instagram-item">
+          <img src="https://images.unsplash.com/photo-1635767798638-3e25273a8236?auto=format&fit=crop&q=80&w=400" alt="Instagram curation 3">
+          <div class="instagram-overlay"><i class="fa-brands fa-instagram"></i></div>
+        </div>
+        <div class="instagram-item">
+          <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=400" alt="Instagram curation 4">
+          <div class="instagram-overlay"><i class="fa-brands fa-instagram"></i></div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- --- ORDER TRACKING SECTION --- -->
-  <section id="tracking-section" class="reveal" style="background:radial-gradient(circle at center, #0e0e0e 0%, #050505 100%); border-top:1px solid var(--color-border); border-bottom:1px solid var(--color-border); padding: 100px 0;">
+  <section id="tracking-section" class="reveal" style="background: var(--color-bg-deep); border-top:1px solid var(--color-border); border-bottom:1px solid var(--color-border); padding: 100px 0;">
     <div class="container">
       <div style="max-width: 720px; margin: 0 auto; text-align: center;">
         <p class="section-subtitle">Real-Time Delivery</p>
@@ -384,14 +501,14 @@
         <!-- Tracking Visual Timeline -->
         <div id="tracking-visual-timeline" style="display:none;" class="glass-panel">
           <div style="padding: 40px;">
-            <div style="display:flex; justify-content:space-between; margin-bottom:25px; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:15px; text-align:left;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:25px; border-bottom:1px solid var(--color-border); padding-bottom:15px; text-align:left;">
               <div>
                 <span style="font-size:10px; color:var(--color-text-muted); text-transform:uppercase;">Registration ID</span>
                 <h4 id="track-order-id-label" style="color:var(--color-gold); font-size:16px; margin-top:3px;">MM-123456</h4>
               </div>
               <div style="text-align:right;">
                 <span style="font-size:10px; color:var(--color-text-muted); text-transform:uppercase;">Shipment Value</span>
-                <p id="track-order-total-label" style="color:#fff; font-size:15px; margin-top:3px;">$0.00</p>
+                <p id="track-order-total-label" style="color:var(--color-text-primary); font-size:15px; margin-top:3px;">$0.00</p>
               </div>
             </div>
             
@@ -677,7 +794,7 @@
       
       <!-- Login View -->
       <div id="auth-login-view">
-        <h3 style="font-size:26px; text-align:center; margin-bottom:5px; color:#fff;">Welcome Back</h3>
+        <h3 style="font-size:26px; text-align:center; margin-bottom:5px; color:var(--color-text-primary);">Welcome Back</h3>
         <p style="text-align:center; font-size:11px; text-transform:uppercase; letter-spacing:0.15em; color:var(--color-gold); margin-bottom:30px;">Atelier Account Access</p>
         
         <form id="login-form">
@@ -698,7 +815,7 @@
 
       <!-- Signup View -->
       <div id="auth-signup-view" style="display:none;">
-        <h3 style="font-size:26px; text-align:center; margin-bottom:5px; color:#fff;">Create Profile</h3>
+        <h3 style="font-size:26px; text-align:center; margin-bottom:5px; color:var(--color-text-primary);">Create Profile</h3>
         <p style="text-align:center; font-size:11px; text-transform:uppercase; letter-spacing:0.15em; color:var(--color-gold); margin-bottom:30px;">Register MM Account</p>
         
         <form id="signup-form">
@@ -727,7 +844,7 @@
   <div id="checkout-modal" class="modal-overlay">
     <div class="modal-wrapper checkout-modal-box" style="padding:40px;">
       <button class="modal-close-btn" id="checkout-modal-close-btn">&times;</button>
-      <h3 style="font-size:28px; text-align:center; margin-bottom:25px; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:12px; color:#fff;">Atelier Authorization</h3>
+      <h3 style="font-size:28px; text-align:center; margin-bottom:25px; border-bottom:1px solid var(--color-border); padding-bottom:12px; color:var(--color-text-primary);">Atelier Authorization</h3>
       
       <div class="checkout-grid" id="checkout-form-container">
         <!-- Billing/shipping Inputs -->
