@@ -1,5 +1,19 @@
 [
   {
+    "id": "log-15-1781292188",
+    "timestamp": "2026-06-13T00:53:08.809390",
+    "action": "media_upload",
+    "details": "Uploaded image: uploaded_test_image.png",
+    "user": "admin"
+  },
+  {
+    "id": "log-14-1781290412",
+    "timestamp": "2026-06-13T00:23:32.151374",
+    "action": "media_upload",
+    "details": "Uploaded image: uploaded_test_image.png",
+    "user": "admin"
+  },
+  {
     "id": "log-13-1781162745",
     "timestamp": "2026-06-11T12:55:45.571542",
     "action": "catalog_update",
