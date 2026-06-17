@@ -82,7 +82,8 @@ async function initApp() {
     initLocalReviews,
     initNewArrivalsCarousel,
     initSearchFilter,
-    initCategoryGridLinks
+    initCategoryGridLinks,
+    initMobileDrawer
   ];
 
   for (const fn of inits) {
@@ -1680,7 +1681,44 @@ function initNewArrivalsCarousel() {
 
 // --- SEARCH FILTER FOR COLLECTIONS ---
 function initSearchFilter() {
-  const searchInput = document.getElementById('navbar-search');
+  const searchInput = document.getElementById('search-overlay-input');
+  const searchTriggerBtn = document.getElementById('header-search-btn');
+  const searchOverlayCloseBtn = document.getElementById('search-overlay-close-btn');
+  const searchOverlay = document.getElementById('search-overlay');
+  
+  if (searchTriggerBtn && searchOverlay && searchInput) {
+    searchTriggerBtn.addEventListener('click', () => {
+      searchOverlay.classList.add('active');
+      setTimeout(() => searchInput.focus(), 100);
+    });
+  }
+  
+  if (searchOverlayCloseBtn && searchOverlay) {
+    searchOverlayCloseBtn.addEventListener('click', () => {
+      searchOverlay.classList.remove('active');
+    });
+  }
+  
+  if (searchOverlay) {
+    searchOverlay.addEventListener('click', (e) => {
+      if (e.target === searchOverlay) {
+        searchOverlay.classList.remove('active');
+      }
+    });
+  }
+  
+  const searchForm = document.querySelector('.search-overlay-form');
+  if (searchForm && searchOverlay) {
+    searchForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      searchOverlay.classList.remove('active');
+      const dest = document.getElementById('collections');
+      if (dest) {
+        dest.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  }
+
   if (!searchInput) return;
 
   searchInput.addEventListener('input', (e) => {
@@ -1743,7 +1781,7 @@ function initCategoryGridLinks() {
         }
         
         setTimeout(() => {
-          const searchInput = document.getElementById('navbar-search');
+          const searchInput = document.getElementById('search-overlay-input');
           if (searchInput) {
             searchInput.value = 'wedding';
             searchInput.dispatchEvent(new Event('input'));
@@ -1766,11 +1804,47 @@ function initCategoryGridLinks() {
             dest.scrollIntoView({ behavior: 'smooth' });
           }
           
-          const searchInput = document.getElementById('navbar-search');
+          const searchInput = document.getElementById('search-overlay-input');
           if (searchInput) {
             searchInput.value = '';
           }
         }
+      }
+    });
+  });
+}
+
+// --- MOBILE MENU DRAWER NAVIGATION ---
+function initMobileDrawer() {
+  const mobileTrigger = document.getElementById('mobile-menu-trigger-btn');
+  const mobileClose = document.getElementById('mobile-drawer-close-btn');
+  const mobileOverlay = document.getElementById('mobile-drawer-overlay');
+  
+  if (mobileTrigger && mobileOverlay) {
+    mobileTrigger.addEventListener('click', () => {
+      mobileOverlay.classList.add('active');
+    });
+  }
+  
+  if (mobileClose && mobileOverlay) {
+    mobileClose.addEventListener('click', () => {
+      mobileOverlay.classList.remove('active');
+    });
+  }
+  
+  if (mobileOverlay) {
+    mobileOverlay.addEventListener('click', (e) => {
+      if (e.target === mobileOverlay) {
+        mobileOverlay.classList.remove('active');
+      }
+    });
+  }
+  
+  const drawerLinks = document.querySelectorAll('.mobile-drawer-links a');
+  drawerLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      if (mobileOverlay) {
+        mobileOverlay.classList.remove('active');
       }
     });
   });

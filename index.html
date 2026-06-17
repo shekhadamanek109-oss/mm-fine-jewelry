@@ -94,11 +94,10 @@
       </nav>
       
       <div class="header-actions">
-        <!-- Search bar inside navbar -->
-        <div class="search-container">
-          <i class="fa-solid fa-magnifying-glass search-icon-inside"></i>
-          <input type="text" id="navbar-search" class="navbar-search-input" placeholder="Search collection...">
-        </div>
+        <!-- Search Trigger Icon -->
+        <button class="btn-icon" id="header-search-btn" aria-label="Search Collection" style="background:none;border:none;color:var(--color-text-primary);cursor:pointer;margin-right:8px;outline:none;">
+          <i class="fa-solid fa-magnifying-glass" style="font-size:18px;"></i>
+        </button>
         
         <!-- Wishlist -->
         <button class="btn-icon" id="header-wishlist-btn" aria-label="Wishlist" style="background:none;border:none;color:var(--color-text-primary);cursor:pointer;position:relative;margin-right:8px;outline:none;">
@@ -117,7 +116,7 @@
           </button>
         </div>
         <a href="#booking" class="btn btn-secondary" style="padding: 10px 20px; font-size: 10px;">Reserve</a>
-        <button class="mobile-menu-btn" aria-label="Toggle Menu">
+        <button class="mobile-menu-btn" id="mobile-menu-trigger-btn" aria-label="Toggle Menu">
           <span></span>
           <span></span>
           <span></span>
@@ -126,17 +125,54 @@
     </div>
   </header>
 
+  <!-- --- SEARCH OVERLAY --- -->
+  <div id="search-overlay" class="search-overlay">
+    <button class="search-overlay-close" id="search-overlay-close-btn">&times;</button>
+    <div class="search-overlay-box">
+      <h3 class="search-overlay-title">Search MM Jewels</h3>
+      <form class="search-overlay-form" onsubmit="event.preventDefault();">
+        <input type="text" id="search-overlay-input" class="search-overlay-input" placeholder="Search our collections..." autocomplete="off">
+        <button type="submit" class="search-overlay-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </form>
+    </div>
+  </div>
+
+  <!-- --- MOBILE NAV DRAWER --- -->
+  <div id="mobile-drawer-overlay" class="mobile-drawer-overlay">
+    <div class="mobile-drawer-container">
+      <button class="mobile-drawer-close" id="mobile-drawer-close-btn">&times;</button>
+      <ul class="mobile-drawer-links">
+        <li><a href="#hero" class="active">Home</a></li>
+        <li><a href="#collections">Collections</a></li>
+        <li><a href="#customizer">Customizer</a></li>
+        <li><a href="#tracking-section">Track Order</a></li>
+        <li><a href="blog.html">Journal</a></li>
+        <li><a href="showrooms.html">Showrooms</a></li>
+        <li><a href="#booking">Consultation</a></li>
+      </ul>
+      <div class="mobile-drawer-footer">
+        <a href="#booking" class="btn btn-primary" style="width:100%;">Reserve Viewing</a>
+      </div>
+    </div>
+  </div>
+
   <!-- --- HERO SECTION --- -->
   <section id="hero" class="hero">
-    <div class="hero-bg"></div>
-    <div class="container">
-      <div class="hero-content">
+    <div class="container hero-container">
+      <!-- Left Column: Content -->
+      <div class="hero-content-col">
         <p class="hero-subtitle" id="hero-subtitle-txt">Bespoke Luxury Jewelry Store Since 1998</p>
         <h1 class="hero-title" id="hero-title-txt">Timeless Elegance</h1>
         <p class="hero-desc" id="hero-desc-txt">Explore MM Jewels for beautiful diamond jewelry, gold jewelry online, silver jewelry collection, and bespoke wedding jewelry sets crafted for timeless elegance.</p>
         <div class="hero-actions">
           <a href="#collections" class="btn btn-primary">Shop Collection</a>
           <a href="#customizer" class="btn btn-secondary">Design Custom</a>
+        </div>
+      </div>
+      <!-- Right Column: Visual Showcase -->
+      <div class="hero-image-col">
+        <div class="hero-image-frame">
+          <div class="hero-bg-media" style="background-image: url('assets/jewelry_hero_light.png');"></div>
         </div>
       </div>
     </div>
@@ -234,18 +270,22 @@
   <!-- --- NEW ARRIVALS CAROUSEL SECTION --- -->
   <section id="new-arrivals" class="reveal" style="background: var(--color-bg-beige); border-bottom: 1px solid var(--color-border);">
     <div class="container">
-      <div class="section-header">
-        <p class="section-subtitle">Fresh Creations</p>
-        <h2 class="section-title">New Arrivals</h2>
+      <div class="section-header section-header-with-actions">
+        <div class="section-header-text">
+          <p class="section-subtitle">Fresh Creations</p>
+          <h2 class="section-title">New Arrivals</h2>
+        </div>
+        <div class="section-header-actions">
+          <button class="carousel-nav-btn prev" id="carousel-prev-btn" aria-label="Previous Slide"><i class="fa-solid fa-chevron-left"></i></button>
+          <button class="carousel-nav-btn next" id="carousel-next-btn" aria-label="Next Slide"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
       </div>
       <div class="carousel-container">
-        <button class="carousel-nav-btn prev" id="carousel-prev-btn" aria-label="Previous Slide"><i class="fa-solid fa-chevron-left"></i></button>
         <div class="carousel-track-wrapper">
           <div class="carousel-track" id="carousel-arrivals-track">
             <!-- JS populates cards here dynamically -->
           </div>
         </div>
-        <button class="carousel-nav-btn next" id="carousel-next-btn" aria-label="Next Slide"><i class="fa-solid fa-chevron-right"></i></button>
       </div>
     </div>
   </section>

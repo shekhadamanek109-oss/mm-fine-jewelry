@@ -114,6 +114,11 @@
       </nav>
       
       <div class="header-actions">
+        <!-- Search Trigger Icon -->
+        <button class="btn-icon" id="header-search-btn" aria-label="Search Collection" style="background:none;border:none;color:var(--color-text-primary);cursor:pointer;margin-right:8px;outline:none;">
+          <i class="fa-solid fa-magnifying-glass" style="font-size:18px;"></i>
+        </button>
+
         <!-- Wishlist -->
         <button class="btn-icon" id="header-wishlist-btn" aria-label="Wishlist" style="background:none;border:none;color:var(--color-text-primary);cursor:pointer;position:relative;margin-right:8px;outline:none;">
           <i class="fa-solid fa-heart" style="font-size:18px;"></i>
@@ -131,7 +136,7 @@
           </button>
         </div>
         <a href="index.html#booking" class="btn btn-secondary" style="padding: 10px 20px; font-size: 10px;">Reserve</a>
-        <button class="mobile-menu-btn" aria-label="Toggle Menu">
+        <button class="mobile-menu-btn" id="mobile-menu-trigger-btn" aria-label="Toggle Menu">
           <span></span>
           <span></span>
           <span></span>
@@ -139,6 +144,37 @@
       </div>
     </div>
   </header>
+
+  <!-- --- SEARCH OVERLAY --- -->
+  <div id="search-overlay" class="search-overlay">
+    <button class="search-overlay-close" id="search-overlay-close-btn">&times;</button>
+    <div class="search-overlay-box">
+      <h3 class="search-overlay-title">Search MM Jewels</h3>
+      <form class="search-overlay-form" onsubmit="event.preventDefault();">
+        <input type="text" id="search-overlay-input" class="search-overlay-input" placeholder="Search our collections..." autocomplete="off">
+        <button type="submit" class="search-overlay-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </form>
+    </div>
+  </div>
+
+  <!-- --- MOBILE NAV DRAWER --- -->
+  <div id="mobile-drawer-overlay" class="mobile-drawer-overlay">
+    <div class="mobile-drawer-container">
+      <button class="mobile-drawer-close" id="mobile-drawer-close-btn">&times;</button>
+      <ul class="mobile-drawer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#collections">Collections</a></li>
+        <li><a href="index.html#customizer">Customizer</a></li>
+        <li><a href="index.html#tracking-section">Track Order</a></li>
+        <li><a href="blog.html" class="active">Journal</a></li>
+        <li><a href="showrooms.html">Showrooms</a></li>
+        <li><a href="index.html#booking">Consultation</a></li>
+      </ul>
+      <div class="mobile-drawer-footer">
+        <a href="index.html#booking" class="btn btn-primary" style="width:100%;">Reserve Viewing</a>
+      </div>
+    </div>
+  </div>
 
   <!-- --- BLOG HERO HEADER --- -->
   <section class="blog-hero" id="blog-hero-header">
