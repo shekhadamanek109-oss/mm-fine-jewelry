@@ -74,10 +74,10 @@
 <body>
 
   <!-- --- HEADER / NAV --- -->
-  <header id="header" class="scrolled">
+  <header id="header" class="scrolled" style="backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); background: rgba(250, 248, 245, 0.75); border-bottom: 1px solid rgba(212, 175, 55, 0.08);">
     <div class="container nav-container">
       <a href="#" class="logo" id="nav-logo-txt">
-        MM JEWELLS
+        MM JEWELS
         <span>JEWELS</span>
       </a>
       
@@ -157,26 +157,68 @@
   </div>
 
   <!-- --- HERO SECTION --- -->
-  <section id="hero" class="hero">
-    <div class="container hero-container">
+  <section id="hero" class="hero" style="position: relative; overflow: hidden; background: radial-gradient(circle at center, #FFFFFF 0%, var(--color-bg-beige) 100%);">
+    <!-- Interactive Canvas Particles Background -->
+    <canvas id="universe-canvas" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: auto; z-index: 1;"></canvas>
+    
+    <div class="container hero-container" style="position: relative; z-index: 2; pointer-events: none;">
       <!-- Left Column: Content -->
-      <div class="hero-content-col">
-        <p class="hero-subtitle" id="hero-subtitle-txt">Bespoke Luxury Jewelry Store Since 1998</p>
-        <h1 class="hero-title" id="hero-title-txt">Timeless Elegance</h1>
-        <p class="hero-desc" id="hero-desc-txt">Explore MM Jewels for beautiful diamond jewelry, gold jewelry online, silver jewelry collection, and bespoke wedding jewelry sets crafted for timeless elegance.</p>
+      <div class="hero-content-col" style="pointer-events: auto;">
+        <p class="hero-subtitle" id="hero-subtitle-txt">Crafting Legacy Through Luxury Since 1998</p>
+        <h1 class="hero-title" id="hero-title-txt">Floating <br><span class="text-gold">Luxury Gallery</span></h1>
+        <p class="hero-desc" id="hero-desc-txt">Experience a dynamic universe where diamonds float and lines morph. MM Jewels crafts unique legacy jewelry tailored for international collectors.</p>
         <div class="hero-actions">
-          <a href="#collections" class="btn btn-primary">Shop Collection</a>
-          <a href="#customizer" class="btn btn-secondary">Design Custom</a>
+          <a href="#collections" class="btn btn-primary">Explore Universe</a>
+          <a href="#customizer" class="btn btn-secondary">Design Legacy</a>
         </div>
       </div>
       <!-- Right Column: Visual Showcase -->
-      <div class="hero-image-col">
-        <div class="hero-image-frame">
+      <div class="hero-image-col" style="pointer-events: auto;">
+        <div class="hero-image-frame" style="transform-style: preserve-3d; transition: transform 0.5s ease-out;">
           <div class="hero-bg-media" style="background-image: url('assets/jewelry_hero_light.png');"></div>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- --- SIGNATURE MM SHOWCASE --- -->
+  <section id="signature-monogram-showcase" class="monogram-section reveal" style="background: var(--color-bg-onyx); color: #FFF; padding: 120px 0; overflow: hidden; position: relative;">
+    <div class="container" style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 80px; align-items: center;">
+      <div class="monogram-visual-col">
+        <!-- SVG Monogram that morphs and draws -->
+        <svg id="monogram-svg" viewBox="0 0 400 400" width="100%" height="100%" style="max-width: 400px; display: block; margin: 0 auto; filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.45));">
+          <!-- Monogram paths tracing MM and morphing shapes -->
+          <path d="M 60,320 L 60,80 L 140,240 L 220,80 L 300,240 L 380,80" fill="none" stroke="url(#goldGradient)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.1;" />
+          <path d="M 60,80 Q 220,180 380,80 Q 300,340 220,240 Q 140,340 60,80" fill="none" stroke="url(#goldGradient)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.1;" />
+          <defs>
+            <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#FFF5D6" />
+              <stop offset="50%" stop-color="#D4AF37" />
+              <stop offset="100%" stop-color="#A27F1A" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <div class="monogram-text-col">
+        <p class="section-subtitle" style="color: var(--color-gold-champagne); margin-bottom: 15px;">The Emblem of Craftsmanship</p>
+        <h2 class="section-title" style="color: #FFFFFF; font-size: 48px; line-height: 1.2; margin-bottom: 30px;">An Artistic Monogram, <br><span class="text-gold">Formed From Gold</span></h2>
+        <p class="monogram-desc" style="color: var(--color-text-muted); font-size: 16px; line-height: 1.8; margin-bottom: 40px; font-weight: 300;">
+          The MM Monogram represents a dialogue between legacy shapes and futuristic jewelry design. Every piece crafted by MM Jewels is an original artistic statement, blending premium champagne gold, platinum silver, and flawless diamonds.
+        </p>
+        <div class="story-highlight" style="display: flex; gap: 40px; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 30px;">
+          <div>
+            <h4 style="font-family: var(--font-serif); font-size: 28px; color: var(--color-gold); line-height: 1.2;">100%</h4>
+            <p style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--color-text-muted); margin-top: 5px;">Bespoke Artistry</p>
+          </div>
+          <div>
+            <h4 style="font-family: var(--font-serif); font-size: 28px; color: var(--color-gold); line-height: 1.2;">24k</h4>
+            <p style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--color-text-muted); margin-top: 5px;">Premium Gold</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 
   <!-- --- CATEGORY GRID SECTION --- -->
   <section class="category-section reveal" id="categories-hub">
@@ -226,6 +268,60 @@
             <span class="category-card-count">Shop Selection</span>
           </div>
         </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- --- HORIZONTAL CINEMATIC SCROLL SECTION --- -->
+  <section class="horizontal-scroll-section" id="cinematic-collections" style="position: relative; height: 300vh; background: var(--color-bg-onyx);">
+    <div class="horizontal-scroll-container" style="position: sticky; top: 0; height: 100vh; overflow: hidden; display: flex; align-items: center;">
+      <div class="horizontal-scroll-track" style="display: flex; gap: 80px; padding: 0 10vw; will-change: transform;">
+        
+        <!-- Panel 1: Diamond Collection -->
+        <div class="horizontal-scroll-item" style="width: 80vw; height: 70vh; flex-shrink: 0; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 60px; align-items: center; background: rgba(255,255,255,0.02); border: 1px solid rgba(212,175,55,0.1); border-radius: var(--border-radius-lg); padding: 60px; box-shadow: var(--shadow-medium); backdrop-filter: blur(10px);">
+          <div class="scroll-item-content">
+            <span class="section-subtitle" style="color: var(--color-gold-champagne);">The Diamond Collection</span>
+            <h3 style="font-family: var(--font-serif); font-size: 54px; color: #FFF; margin: 20px 0; font-weight: 300; line-height: 1.1;">Luminous <br>Artistry</h3>
+            <p style="color: var(--color-text-muted); font-size: 15px; line-height: 1.8; margin-bottom: 30px; font-weight: 300;">
+              Every cut is engineered to maximize fire, brilliance, and light-scattering properties. MM Jewels diamond lines represent the pinnacle of luxury, hand-set in platinum silver.
+            </p>
+            <a href="#collections" class="btn btn-primary">Discover Diamonds</a>
+          </div>
+          <div class="scroll-item-image" style="height: 100%; border-radius: var(--border-radius-sm); overflow: hidden; position: relative;">
+            <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=600" alt="Luminous Diamonds" style="width: 100%; height: 100%; object-fit: cover;">
+          </div>
+        </div>
+
+        <!-- Panel 2: Gold Collection -->
+        <div class="horizontal-scroll-item" style="width: 80vw; height: 70vh; flex-shrink: 0; display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 60px; align-items: center; background: rgba(255,255,255,0.02); border: 1px solid rgba(212,175,55,0.1); border-radius: var(--border-radius-lg); padding: 60px; box-shadow: var(--shadow-medium); backdrop-filter: blur(10px);">
+          <div class="scroll-item-image" style="height: 100%; border-radius: var(--border-radius-sm); overflow: hidden; position: relative;">
+            <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=600" alt="Sovereign Gold" style="width: 100%; height: 100%; object-fit: cover;">
+          </div>
+          <div class="scroll-item-content">
+            <span class="section-subtitle" style="color: var(--color-gold-champagne);">The Gold Collection</span>
+            <h3 style="font-family: var(--font-serif); font-size: 54px; color: #FFF; margin: 20px 0; font-weight: 300; line-height: 1.1;">Sovereign <br>Elegance</h3>
+            <p style="color: var(--color-text-muted); font-size: 15px; line-height: 1.8; margin-bottom: 30px; font-weight: 300;">
+              Hand-carved champagne gold forms organic contours that follow the lines of the body. Sculpted for weight, feel, and timeless luxury status.
+            </p>
+            <a href="#collections" class="btn btn-primary">Discover Gold</a>
+          </div>
+        </div>
+
+        <!-- Panel 3: Bespoke Wedding Collection -->
+        <div class="horizontal-scroll-item" style="width: 80vw; height: 70vh; flex-shrink: 0; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 60px; align-items: center; background: rgba(255,255,255,0.02); border: 1px solid rgba(212,175,55,0.1); border-radius: var(--border-radius-lg); padding: 60px; box-shadow: var(--shadow-medium); backdrop-filter: blur(10px);">
+          <div class="scroll-item-content">
+            <span class="section-subtitle" style="color: var(--color-gold-champagne);">Bespoke Wedding Sets</span>
+            <h3 style="font-family: var(--font-serif); font-size: 54px; color: #FFF; margin: 20px 0; font-weight: 300; line-height: 1.1;">Legacy <br>Unions</h3>
+            <p style="color: var(--color-text-muted); font-size: 15px; line-height: 1.8; margin-bottom: 30px; font-weight: 300;">
+              Crafted in pairs to represent perfect geometry and balanced symmetry. Personalized details engrave family legacy onto platinum bands.
+            </p>
+            <a href="#booking" class="btn btn-primary">Book Consultation</a>
+          </div>
+          <div class="scroll-item-image" style="height: 100%; border-radius: var(--border-radius-sm); overflow: hidden; position: relative;">
+            <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=600" alt="Bespoke Unions" style="width: 100%; height: 100%; object-fit: cover;">
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -443,30 +539,71 @@
     </div>
   </section>
 
-  <!-- --- ATELIER / STORY SECTION --- -->
-  <section id="atelier" class="reveal">
+  <!-- --- HERITAGE TIMELINE SECTION --- -->
+  <section id="heritage-timeline" class="reveal" style="padding: 120px 0; background: var(--color-bg-beige); position: relative; border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
     <div class="container">
-      <div class="atelier-grid">
-        <div class="atelier-images">
-          <img class="atelier-img-1" src="https://images.unsplash.com/photo-1531747118685-ca8fa6e08806?auto=format&fit=crop&q=80&w=600" alt="Master craftsman working on diamond setting" loading="lazy">
-          <img class="atelier-img-2" src="https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&q=80&w=600" alt="Exquisite sketch of bespoke ring" loading="lazy">
-        </div>
+      <div class="section-header" style="margin-bottom: 80px;">
+        <p class="section-subtitle">Our Chronology</p>
+        <h2 class="section-title">The Heritage of MM Jewels</h2>
+      </div>
+      
+      <div class="timeline-wrapper" style="position: relative; max-width: 900px; margin: 0 auto;">
+        <!-- Vertical Timeline Line -->
+        <div class="timeline-line" style="position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--color-border); transform: translateX(-50%);"></div>
         
-        <div class="atelier-content">
-          <p class="section-subtitle" id="atelier-subtitle-txt">Heritage & Philosophy</p>
-          <h2 class="atelier-title" id="atelier-title-txt">The Craftsmanship Behind MM Jewels</h2>
-          <p class="atelier-text" id="atelier-text1-txt">Every master creation inside the MM Jewels Atelier begins its life as a pencil stroke on tracing paper. Our world-renowned lapidaries select only the most outstanding gemstones, sourcing them ethically from locations known for historic purity.</p>
-          <p class="atelier-text" id="atelier-text2-txt">Hand-forged by master goldsmiths using traditional heating methods and modern design refinements, each ring, necklace, and bangle holds a presence that transcends fashion cycles. We produce only a small batch of fine jewelry each season, preserving rarity and value.</p>
-          
-          <div class="atelier-features">
-            <div class="feat-item">
-              <h4 id="atelier-feat1-title-txt">Bespoke Heritage</h4>
-              <p id="atelier-feat1-desc-txt">Tailor jewelry pieces matching your personal history with our specialized private designers.</p>
-            </div>
-            <div class="feat-item">
-              <h4 id="atelier-feat2-title-txt">Conflict-Free Gems</h4>
-              <p id="atelier-feat2-desc-txt">Every single gemstone has been certified under strict Kimberly process agreements.</p>
-            </div>
+        <!-- Timeline Item 1 -->
+        <div class="timeline-item reveal" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 70px; position: relative;">
+          <div class="timeline-content-left" style="width: 42%; text-align: right; pointer-events: auto;">
+            <span class="timeline-year" style="font-family: var(--font-serif); font-size: 32px; color: var(--color-gold); font-weight: 300;">1998</span>
+            <h4 class="timeline-title" style="font-family: var(--font-serif); font-size: 20px; margin: 10px 0;">Founding in Place Vendôme</h4>
+            <p style="color: var(--color-text-secondary); font-size: 14px; line-height: 1.7; font-weight: 300;">
+              MM Jewels begins as a private salon, crafting bespoke, master-grade diamonds for elite clients in Paris.
+            </p>
+          </div>
+          <!-- Node Dot -->
+          <div class="timeline-node" style="position: absolute; left: 50%; transform: translateX(-50%); width: 12px; height: 12px; border-radius: 50%; background: var(--color-gold); border: 3px solid #FFF; box-shadow: 0 0 10px var(--color-gold); z-index: 2;"></div>
+          <div class="timeline-space" style="width: 42%;"></div>
+        </div>
+
+        <!-- Timeline Item 2 -->
+        <div class="timeline-item reveal" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 70px; position: relative;">
+          <div class="timeline-space" style="width: 42%;"></div>
+          <!-- Node Dot -->
+          <div class="timeline-node" style="position: absolute; left: 50%; transform: translateX(-50%); width: 12px; height: 12px; border-radius: 50%; background: var(--color-gold); border: 3px solid #FFF; box-shadow: 0 0 10px var(--color-gold); z-index: 2;"></div>
+          <div class="timeline-content-right" style="width: 42%; text-align: left; pointer-events: auto;">
+            <span class="timeline-year" style="font-family: var(--font-serif); font-size: 32px; color: var(--color-gold); font-weight: 300;">2007</span>
+            <h4 class="timeline-title" style="font-family: var(--font-serif); font-size: 20px; margin: 10px 0;">The Bespoke Studio Launch</h4>
+            <p style="color: var(--color-text-secondary); font-size: 14px; line-height: 1.7; font-weight: 300;">
+              Pioneering custom jewelry visualization, giving customers a seat next to goldsmiths during ring designs.
+            </p>
+          </div>
+        </div>
+
+        <!-- Timeline Item 3 -->
+        <div class="timeline-item reveal" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 70px; position: relative;">
+          <div class="timeline-content-left" style="width: 42%; text-align: right; pointer-events: auto;">
+            <span class="timeline-year" style="font-family: var(--font-serif); font-size: 32px; color: var(--color-gold); font-weight: 300;">2015</span>
+            <h4 class="timeline-title" style="font-family: var(--font-serif); font-size: 20px; margin: 10px 0;">100% Conflict-Free Pledge</h4>
+            <p style="color: var(--color-text-secondary); font-size: 14px; line-height: 1.7; font-weight: 300;">
+              Forming global partnerships with certified miners, securing full ethical traceability on every diamond sourced.
+            </p>
+          </div>
+          <!-- Node Dot -->
+          <div class="timeline-node" style="position: absolute; left: 50%; transform: translateX(-50%); width: 12px; height: 12px; border-radius: 50%; background: var(--color-gold); border: 3px solid #FFF; box-shadow: 0 0 10px var(--color-gold); z-index: 2;"></div>
+          <div class="timeline-space" style="width: 42%;"></div>
+        </div>
+
+        <!-- Timeline Item 4 -->
+        <div class="timeline-item reveal" style="display: flex; justify-content: space-between; align-items: center; width: 100%; position: relative;">
+          <div class="timeline-space" style="width: 42%;"></div>
+          <!-- Node Dot -->
+          <div class="timeline-node" style="position: absolute; left: 50%; transform: translateX(-50%); width: 12px; height: 12px; border-radius: 50%; background: var(--color-gold); border: 3px solid #FFF; box-shadow: 0 0 10px var(--color-gold); z-index: 2;"></div>
+          <div class="timeline-content-right" style="width: 42%; text-align: left; pointer-events: auto;">
+            <span class="timeline-year" style="font-family: var(--font-serif); font-size: 32px; color: var(--color-gold); font-weight: 300;">Present</span>
+            <h4 class="timeline-title" style="font-family: var(--font-serif); font-size: 20px; margin: 10px 0;">Futuristic Legacy Era</h4>
+            <p style="color: var(--color-text-secondary); font-size: 14px; line-height: 1.7; font-weight: 300;">
+              MM Jewels integrates digital customization and 3D rendering with ancient luxury jewelry principles.
+            </p>
           </div>
         </div>
       </div>

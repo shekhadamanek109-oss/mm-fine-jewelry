@@ -3,37 +3,40 @@
 :root {
   --color-bg-deep: #FFFFFF;
   --color-bg-card: #FFFFFF;
-  --color-bg-nav: rgba(255, 255, 255, 0.95);
-  --color-bg-beige: #F9F6F0; /* Soft warm ivory champagne */
-  --color-border: rgba(197, 168, 84, 0.18); /* Matte gold borders */
-  --color-border-hover: rgba(197, 168, 84, 0.55);
+  --color-bg-nav: rgba(250, 248, 245, 0.82);
+  --color-bg-beige: #FAF8F5; /* Warm luxury ivory */
+  --color-bg-onyx: #0A0A0A; /* Deep premium black */
+  --color-border: rgba(212, 175, 55, 0.15); /* Delicate gold borders */
+  --color-border-hover: rgba(212, 175, 55, 0.5);
   
-  /* Gold Palette */
-  --color-gold-light: #DFCA9E;
-  --color-gold: #C5A854; /* Matte luxury gold */
-  --color-gold-dark: #9F8237;
-  --color-gold-gradient: linear-gradient(135deg, #F3E5C8 0%, #C5A854 50%, #9F8237 100%);
-  --color-gold-glow: rgba(197, 168, 84, 0.12);
+  /* Luxury Palette */
+  --color-gold-light: #E9D7A5;
+  --color-gold: #D4AF37; /* Champagne gold */
+  --color-gold-dark: #A27F1A;
+  --color-platinum: #E5E5E5; /* Platinum silver */
+  --color-gold-gradient: linear-gradient(135deg, #FAF4E5 0%, #D4AF37 50%, #A27F1A 100%);
+  --color-platinum-gradient: linear-gradient(135deg, #FFFFFF 0%, #E5E5E5 50%, #A3A3A3 100%);
+  --color-gold-glow: rgba(212, 175, 55, 0.12);
   
-  /* Text colors */
-  --color-text-primary: #111111; /* Solid off-black */
-  --color-text-secondary: #444444; /* Charcoal for readability */
-  --color-text-muted: #7F7F7F;
+  /* Text Colors */
+  --color-text-primary: #0A0A0A; /* Rich deep off-black */
+  --color-text-secondary: #4A4A4A; /* Refined charcoal */
+  --color-text-muted: #8E8E8E;
   
-  /* Fonts */
+  /* Typography */
   --font-serif: 'Playfair Display', serif;
   --font-sans: 'Inter', sans-serif;
   
   /* Layout */
-  --header-height: 85px; /* Premium tall header */
-  --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-quick: all 0.25s ease;
+  --header-height: 85px;
+  --transition-smooth: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-quick: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   
-  /* Borders and Shadows */
-  --border-radius-lg: 16px;
-  --border-radius-sm: 8px;
-  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.03), 0 1px 8px rgba(0, 0, 0, 0.01);
-  --shadow-medium: 0 20px 40px rgba(197, 168, 84, 0.06), 0 5px 20px rgba(0, 0, 0, 0.02);
+  /* Shapes & Shadows */
+  --border-radius-lg: 24px; /* Slightly softer borders for futuristic look */
+  --border-radius-sm: 12px;
+  --shadow-soft: 0 10px 40px rgba(0, 0, 0, 0.02), 0 1px 10px rgba(0, 0, 0, 0.005);
+  --shadow-medium: 0 30px 60px rgba(212, 175, 55, 0.05), 0 10px 30px rgba(0, 0, 0, 0.01);
 }
 
 /* --- BASE STYLES --- */
@@ -2634,6 +2637,197 @@ footer {
   gap: 15px;
   border-top: 1px solid var(--color-border);
   padding-top: 30px;
+}
+
+/* --- SIGNATURE MONOGRAM SHOWCASE STYLING --- */
+.monogram-section {
+  position: relative;
+}
+
+.monogram-visual-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px;
+}
+
+/* Vector paths line stroke morph drawing animation */
+#monogram-svg path {
+  opacity: 0.1;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+}
+
+.animate-monogram #monogram-svg path {
+  animation: drawStroke 2.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes drawStroke {
+  to {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+/* --- HORIZONTAL CINEMATIC SCROLLING --- */
+.horizontal-scroll-section {
+  width: 100%;
+}
+
+.horizontal-scroll-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.horizontal-scroll-track {
+  display: flex;
+  gap: 80px;
+  will-change: transform;
+  transition: transform 0.1s ease-out;
+}
+
+.horizontal-scroll-item {
+  position: relative;
+  transition: var(--transition-smooth);
+}
+
+.horizontal-scroll-item:hover {
+  border-color: var(--color-gold-champagne) !important;
+  box-shadow: 0 40px 80px rgba(212, 175, 55, 0.1) !important;
+}
+
+/* --- CARD GLARE & SHIMMER --- */
+.card-glare-effect {
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+/* Sparkle shine highlights on luxury hover cards */
+.jewelry-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+  transform: skewX(-25deg);
+  transition: 0.75s;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.jewelry-card:hover::before {
+  left: 150%;
+}
+
+/* --- HERITAGE TIMELINE STYLING --- */
+.timeline-wrapper {
+  padding: 40px 0;
+}
+
+.timeline-item {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: var(--transition-smooth);
+}
+
+.timeline-item.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.timeline-node {
+  transition: var(--transition-smooth);
+}
+
+.timeline-item:hover .timeline-node {
+  background: #FFFFFF !important;
+  border-color: var(--color-gold) !important;
+  transform: translateX(-50%) scale(1.3);
+  box-shadow: 0 0 20px var(--color-gold);
+}
+
+/* --- MOBILE RESPONSIVENESS OVERRIDES --- */
+@media (max-width: 992px) {
+  #signature-monogram-showcase .container {
+    grid-template-columns: 1fr !important;
+    gap: 40px;
+    text-align: center;
+  }
+  
+  .monogram-text-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .story-highlight {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  /* For mobile: convert horizontal scrolling to normal swipe or column layout for accessibility and fast scrolls */
+  .horizontal-scroll-section {
+    height: auto !important;
+    padding: 80px 0;
+  }
+  
+  .horizontal-scroll-container {
+    height: auto !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 20px;
+    display: block;
+  }
+  
+  .horizontal-scroll-track {
+    gap: 30px;
+    padding: 0;
+    flex-direction: column;
+  }
+  
+  .horizontal-scroll-item {
+    width: 100% !important;
+    height: auto !important;
+    grid-template-columns: 1fr !important;
+    gap: 30px !important;
+    padding: 30px !important;
+  }
+  
+  .scroll-item-image {
+    height: 300px !important;
+  }
+  
+  /* Timeline stacking */
+  .timeline-line {
+    left: 20px !important;
+  }
+  
+  .timeline-node {
+    left: 20px !important;
+  }
+  
+  .timeline-item {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    padding-left: 45px;
+    margin-bottom: 50px !important;
+  }
+  
+  .timeline-content-left,
+  .timeline-content-right {
+    width: 100% !important;
+    text-align: left !important;
+  }
+  
+  .timeline-space {
+    display: none;
+  }
 }
 
 

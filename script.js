@@ -83,7 +83,11 @@ async function initApp() {
     initNewArrivalsCarousel,
     initSearchFilter,
     initCategoryGridLinks,
-    initMobileDrawer
+    initMobileDrawer,
+    initUniverseCanvas,
+    initCardTilts,
+    initHorizontalScroll,
+    initMonogramShowcase
   ];
 
   for (const fn of inits) {
@@ -1848,5 +1852,278 @@ function initMobileDrawer() {
       }
     });
   });
+}
+
+// --- 3D DIAMOND UNIVERSE CANVAS ---
+function initUniverseCanvas() {
+  const canvas = document.getElementById('universe-canvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  let width = canvas.offsetWidth;
+  let height = canvas.offsetHeight;
+  canvas.width = width;
+  canvas.height = height;
+
+  const particles = [];
+  const particleCount = 45;
+  let mouse = { x: -1000, y: -1000, targetX: -1000, targetY: -1000 };
+
+  class DiamondParticle {
+    constructor() {
+      this.reset(true);
+    }
+
+    reset(init = false) {
+      this.x = Math.random() * width;
+      this.y = init ? Math.random() * height : height + 50;
+      this.z = Math.random() * 200 + 50;
+      this.size = (Math.random() * 6 + 2) * (150 / this.z);
+      this.speed = (Math.random() * 0.4 + 0.15) * (150 / this.z);
+      this.opacity = Math.random() * 0.6 + 0.1;
+      this.rotation = Math.random() * Math.PI * 2;
+      this.rotSpeed = (Math.random() * 0.012 - 0.006);
+      this.color = Math.random() > 0.5 ? 'rgba(212, 175, 55, 0.4)' : 'rgba(229, 229, 229, 0.5)';
+      this.baseX = this.x;
+    }
+
+    update() {
+      this.y -= this.speed;
+      this.rotation += this.rotSpeed;
+
+      const dx = mouse.x - this.x;
+      const dy = mouse.y - this.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      let forceX = 0;
+      let forceY = 0;
+
+      if (dist < 180) {
+        const force = (180 - dist) / 180;
+        forceX = (dx / dist) * force * 18 * (100 / this.z);
+        forceY = (dy / dist) * force * 18 * (100 / this.z);
+      }
+
+      this.x += (this.baseX - this.x - forceX) * 0.05;
+      
+      if (this.y < -50) {
+        this.reset(false);
+      }
+    }
+
+    draw() {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rotation);
+      ctx.globalAlpha = this.opacity;
+
+      ctx.beginPath();
+      ctx.moveTo(0, -this.size);
+      ctx.lineTo(this.size * 0.6, 0);
+      ctx.lineTo(0, this.size);
+      ctx.lineTo(-this.size * 0.6, 0);
+      ctx.closePath();
+
+      const gradient = ctx.createLinearGradient(-this.size, -this.size, this.size, this.size);
+      gradient.addColorStop(0, '#FFFFFF');
+      gradient.addColorStop(0.5, this.color);
+      gradient.addColorStop(1, '#B3B3B3');
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+      ctx.lineWidth = 0.5;
+      ctx.stroke();
+
+      ctx.restore();
+    }
+  }
+
+  for (let i = 0; i < particleCount; i++) {
+    particles.push(new DiamondParticle());
+  }
+
+  window.addEventListener('mousemove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    mouse.targetX = e.clientX - rect.left;
+    mouse.targetY = e.clientY - rect.top;
+  });
+
+  window.addEventListener('mouseleave', () => {
+    mouse.targetX = -1000;
+    mouse.targetY = -1000;
+  });
+
+  window.addEventListener('click', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const clickY = e.clientY - rect.top;
+    
+    if (clickY >= 0 && clickY <= height) {
+      for (let i = 0; i < 15; i++) {
+        const p = new DiamondParticle();
+        p.x = clickX;
+        p.y = clickY;
+        p.baseX = clickX;
+        p.speed = (Math.random() * 4 - 2);
+        p.opacity = 1;
+        p.size = Math.random() * 4 + 2;
+        const angle = Math.random() * Math.PI * 2;
+        const speedVal = Math.random() * 3 + 1;
+        p.update = function() {
+          this.x += Math.cos(angle) * speedVal;
+          this.y += Math.sin(angle) * speedVal + 0.1;
+          this.opacity -= 0.02;
+          this.rotation += 0.05;
+        };
+        particles.push(p);
+      }
+    }
+  });
+
+  const animate = () => {
+    ctx.clearRect(0, 0, width, height);
+
+    mouse.x += (mouse.targetX - mouse.x) * 0.08;
+    mouse.y += (mouse.targetY - mouse.y) * 0.08;
+
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.update();
+      p.draw();
+      
+      if (p.opacity <= 0) {
+        particles.splice(i, 1);
+      }
+    }
+
+    while (particles.filter(p => !p.update.toString().includes('Exploding')).length < particleCount) {
+      particles.push(new DiamondParticle());
+    }
+
+    requestAnimationFrame(animate);
+  };
+
+  const handleResize = () => {
+    width = canvas.offsetWidth;
+    height = canvas.offsetHeight;
+    canvas.width = width;
+    canvas.height = height;
+  };
+
+  window.addEventListener('resize', handleResize);
+  animate();
+}
+
+// --- 3D MOUSE PARALLAX TILT EFFECTS ---
+function initCardTilts() {
+  const cards = document.querySelectorAll('.jewelry-card, .category-card, .timeline-card, .hero-image-frame');
+  cards.forEach(card => {
+    card.style.transformStyle = 'preserve-3d';
+    card.style.willChange = 'transform';
+    
+    if (!card.querySelector('.card-glare-effect')) {
+      const glare = document.createElement('div');
+      glare.className = 'card-glare-effect';
+      glare.style.position = 'absolute';
+      glare.style.inset = '0';
+      glare.style.background = 'radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.2) 0%, rgba(255,255,255,0) 80%)';
+      glare.style.pointerEvents = 'none';
+      glare.style.opacity = '0';
+      glare.style.zIndex = '3';
+      glare.style.transition = 'opacity 0.3s ease';
+      card.appendChild(glare);
+    }
+    
+    const glare = card.querySelector('.card-glare-effect');
+    
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const midX = rect.width / 2;
+      const midY = rect.height / 2;
+      
+      const rotY = ((x - midX) / midX) * 10; // Max 10 deg tilt
+      const rotX = -((y - midY) / midY) * 10;
+      
+      card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.02)`;
+      
+      if (glare) {
+        glare.style.opacity = '1';
+        glare.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255, 255, 255, 0.25) 0%, rgba(255,255,255,0) 70%)`;
+      }
+    });
+    
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+      if (glare) {
+        glare.style.opacity = '0';
+      }
+    });
+  });
+}
+
+// --- HORIZONTAL CINEMATIC SCROLLING ---
+function initHorizontalScroll() {
+  const section = document.querySelector('.horizontal-scroll-section');
+  const track = document.querySelector('.horizontal-scroll-track');
+  if (!section || !track) return;
+  
+  const updateScroll = () => {
+    const rect = section.getBoundingClientRect();
+    const sectionHeight = rect.height;
+    const windowHeight = window.innerHeight;
+    
+    if (rect.top <= 0 && rect.bottom >= windowHeight) {
+      const scrolled = -rect.top;
+      const totalScrollable = sectionHeight - windowHeight;
+      const pct = scrolled / totalScrollable;
+      
+      const trackWidth = track.scrollWidth;
+      const maxTranslate = trackWidth - window.innerWidth;
+      
+      if (maxTranslate > 0) {
+        track.style.transform = `translateX(-${pct * maxTranslate}px)`;
+      }
+    } else if (rect.top > 0) {
+      track.style.transform = `translateX(0px)`;
+    } else if (rect.bottom < windowHeight) {
+      const trackWidth = track.scrollWidth;
+      const maxTranslate = trackWidth - window.innerWidth;
+      track.style.transform = `translateX(-${maxTranslate}px)`;
+    }
+  };
+  
+  window.addEventListener('scroll', updateScroll);
+  window.addEventListener('resize', updateScroll);
+}
+
+// --- MM SIGNATURE MONOGRAM SHOWCASE ---
+function initMonogramShowcase() {
+  const section = document.getElementById('signature-monogram-showcase');
+  if (!section) return;
+
+  const svgPaths = section.querySelectorAll('#monogram-svg path');
+  if (svgPaths.length === 0) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        section.classList.add('animate-monogram');
+        svgPaths.forEach((path, idx) => {
+          const length = path.getTotalLength();
+          path.style.strokeDasharray = length;
+          path.style.strokeDashoffset = length;
+          path.style.transition = `stroke-dashoffset 2.2s cubic-bezier(0.16, 1, 0.3, 1) ${idx * 0.3}s, opacity 0.5s ease ${idx * 0.3}s`;
+          path.getBoundingClientRect();
+          path.style.strokeDashoffset = '0';
+          path.style.opacity = '1';
+        });
+      }
+    });
+  }, { threshold: 0.2 });
+
+  observer.observe(section);
 }
 
