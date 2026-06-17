@@ -1359,13 +1359,39 @@ function initScrollReveals() {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('revealed');
+          // Unobserve once revealed to free up monitoring resources
+          observer.unobserve(entry.target);
         }
       });
     }, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' });
     reveals.forEach(r => observer.observe(r));
   } else {
-    // Fallback: reveal everything immediately if IntersectionObserver is not supported
-    reveals.forEach(r => r.classList.add('revealed'));
+    // Fallback: throttled scroll listener for older browsers
+    const checkReveal = () => {
+      const triggerBottom = window.innerHeight * 0.95;
+      reveals.forEach(r => {
+        if (!r.classList.contains('revealed')) {
+          const rect = r.getBoundingClientRect();
+          if (rect.top < triggerBottom) {
+            r.classList.add('revealed');
+          }
+        }
+      });
+    };
+
+    let timeout;
+    const throttledScroll = () => {
+      if (!timeout) {
+        timeout = setTimeout(() => {
+          checkReveal();
+          timeout = null;
+        }, 100);
+      }
+    };
+    
+    window.addEventListener('scroll', throttledScroll);
+    // Run once initially
+    checkReveal();
   }
 
   // 2. Click fallback for anchor links
@@ -1382,20 +1408,6 @@ function initScrollReveals() {
       }
     });
   });
-
-  // 3. Scroll fallback (just in case)
-  const checkReveal = () => {
-    const triggerBottom = window.innerHeight * 0.95;
-    reveals.forEach(r => {
-      const rect = r.getBoundingClientRect();
-      if (rect.top < triggerBottom) {
-        r.classList.add('revealed');
-      }
-    });
-  };
-  window.addEventListener('scroll', checkReveal);
-  // Run once initially to catch elements already in viewport
-  setTimeout(checkReveal, 200);
 }
 
 // --- SEO DYNAMIC FUNCTIONS ---

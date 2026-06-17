@@ -106,22 +106,5 @@
       "weight": "42 grams",
       "length": "40 cm"
     }
-  },
-  {
-    "id": "item-1781162646909",
-    "category": "rings",
-    "title": "b",
-    "price": "099009",
-    "img": "nmkdnejkwncjkenhcd",
-    "badge": "",
-    "desc": "\n",
-    "stock": 5,
-    "enabled": true,
-    "specs": {
-      "metal": "",
-      "gemstone": "",
-      "carats": "",
-      "clarity": ""
-    }
   }
 ]

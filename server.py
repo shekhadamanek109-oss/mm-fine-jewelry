@@ -60,9 +60,17 @@ class CustomServerHandler(SimpleHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type')
-        self.send_header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
-        self.send_header('Pragma', 'no-cache')
-        self.send_header('Expires', '0')
+        
+        # Only disable cache for API endpoints and JSON data
+        path = self.path.split('?')[0]
+        if path.startswith('/api/') or path.startswith('/data/') or path.endswith('.json'):
+            self.send_header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            self.send_header('Pragma', 'no-cache')
+            self.send_header('Expires', '0')
+        else:
+            # Allow caching of static assets (HTML, CSS, JS, images, etc.) for 1 hour
+            self.send_header('Cache-Control', 'public, max-age=3600')
+            
         super().end_headers()
 
     def do_OPTIONS(self):
