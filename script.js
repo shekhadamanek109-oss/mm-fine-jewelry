@@ -77,7 +77,6 @@ async function initApp() {
     initAIGenerator,
     initProductZoom,
     initScrollReveals,
-    populateFooterShowrooms,
     initBlogPage,
     initLocalReviews,
     initNewArrivalsCarousel,
@@ -1417,19 +1416,7 @@ function initScrollReveals() {
 
 // --- SEO DYNAMIC FUNCTIONS ---
 
-function populateFooterShowrooms() {
-  const list = document.getElementById('footer-showrooms-list');
-  if (!list) return;
-  list.innerHTML = '';
-  const showrooms = state.config.showrooms || ["Paris (Place Vendôme)", "New York (Fifth Avenue)", "Geneva (Rue du Rhône)", "London (Bond Street)"];
-  showrooms.forEach(s => {
-    const li = document.createElement('li');
-    const cityName = s.split(' (')[0].trim();
-    const slug = cityName.toLowerCase().replace(' ', '-');
-    li.innerHTML = `<a href="showrooms.html#${slug}">${s}</a>`;
-    list.appendChild(li);
-  });
-}
+
 
 function initBlogPage() {
   const filterBtns = document.querySelectorAll('.blog-filter-btn');
